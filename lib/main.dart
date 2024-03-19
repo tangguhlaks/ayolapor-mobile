@@ -1,3 +1,4 @@
+import 'package:ayolapor/home.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -33,7 +34,7 @@ class _LoginFormState extends State<LoginForm> {
     String username = _usernameController.text;
     String password = _passwordController.text;
     print('$_selectedRole username: $username, Password: $password');
-    // Example: Validate and send login request to server
+    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
   }
 
   @override
