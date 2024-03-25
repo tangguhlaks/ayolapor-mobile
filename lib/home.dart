@@ -1,5 +1,6 @@
-import 'package:ayolapor/homepage.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'homepage.dart'; // Import the HomePage widget from homepage.dart
 
 void main() {
   runApp(MyApp());
@@ -20,14 +21,29 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  String username = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _getUsername();
+  }
+
+  _getUsername() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username') ?? '';
+    });
+  }
+
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions = <Widget>[
-    HomePage(),
-    Text('Report Page'),
-    Text('News Page'),
-    Text('Setting Page'),
-  ];
+  static List<Widget> _widgetOptions(String username) => <Widget>[
+        Text(username),
+        Text('Report Page'),
+        Text('News Page'),
+        Text('Setting Page'),
+      ];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -39,7 +55,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _widgetOptions.elementAt(_selectedIndex),
+        child: _widgetOptions(username)[_selectedIndex],
       ),
       bottomNavigationBar: SafeArea(
         child: BottomNavigationBar(

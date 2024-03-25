@@ -1,5 +1,10 @@
 import 'package:ayolapor/home.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'GlobalConfig.dart';
 
 class LoginScreen extends StatelessWidget {
   @override
@@ -29,13 +34,31 @@ class _LoginFormState extends State<LoginForm> {
   String _selectedRole = 'Mahasiswa';
   List<String> _roles = ['Mahasiswa', 'Dosen Wali', 'Kemahasiswaan'];
 
-  void _login() {
-    // Implement your login logic here
-    String username = _usernameController.text;
-    String password = _passwordController.text;
-    print('$_selectedRole username: $username, Password: $password');
-    Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+ void _login() async {
+  String username = _usernameController.text;
+  String password = _passwordController.text;
+  String role = _selectedRole;
+
+  Map<String, dynamic> body = {
+    'username': username,
+    'password': password,
+    'role': role,
+  };
+
+  // Lakukan panggilan API
+  var url = Uri.parse(GlobalsConfig.url_api+'login');
+  var response = await http.post(url, body: body);
+  var responseBody = json.decode(response.body);
+  if (responseBody['status_auth']) {
+     SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('username', username);
+      prefs.setString('role', role);
+
+     Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+  }else{
+    print(responseBody);
   }
+}
 
   @override
   Widget build(BuildContext context) {
