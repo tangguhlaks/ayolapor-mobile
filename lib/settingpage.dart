@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'profile.dart';
 
 void main() {
   runApp(MyApp());
@@ -46,11 +47,12 @@ class SettingPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            buildOption('FAQ', Icons.arrow_forward),
-            buildOption('Laporkan Bug & Saran', Icons.arrow_forward),
+            buildOption('FAQ', Icons.arrow_forward, context),
+            buildOption('Laporkan Bug & Saran', Icons.arrow_forward, context),
             buildToggleOption('Rekam Cepat'),
             buildToggleOption('Mode Gelap'),
-            buildOption('Hubungi Kami', Icons.phone),
+            buildOption('Hubungi Kami', Icons.phone, context),
+            buildOption('Profile', Icons.arrow_forward, context),
             SizedBox(height: 8),
             ElevatedButton(
               onPressed: () {
@@ -71,17 +73,27 @@ class SettingPage extends StatelessWidget {
     );
   }
 
-  Widget buildOption(String text, IconData icon) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey),
-      ),
-      child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16),
-        title: Text(text, style: TextStyle(color: Colors.red)),
-        trailing: Icon(icon, color: Colors.red, size: 20),
+  Widget buildOption(String text, IconData icon, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        if (text == 'Profile') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+          );
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey),
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+          title: Text(text, style: TextStyle(color: Colors.red)),
+          trailing: Icon(icon, color: Colors.red, size: 20),
+        ),
       ),
     );
   }
