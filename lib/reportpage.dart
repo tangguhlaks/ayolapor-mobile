@@ -77,6 +77,9 @@ class ReportPage extends StatelessWidget {
   }
 }
 
+
+
+
 Widget buildOption(String text, IconData icon, String date, String status) {
   Color statusColor = Colors.red;
   if (status == 'Selesai' || status == 'Sudah Ditindak Lanjut Dosen Wali') {

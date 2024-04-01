@@ -2,7 +2,9 @@ import 'package:ayolapor/homepage.dart';
 import 'package:ayolapor/reportpage.dart';
 import 'package:ayolapor/settingpage.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart'; // Import the HomePage widget from homepage.dart
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'reportpage.dart'; // Import the HomePage widget from homepage.dart
 
 void main() {
   runApp(MyApp());
@@ -43,7 +45,6 @@ class _HomeState extends State<Home> {
   static List<Widget> _widgetOptions(String username) => <Widget>[
         HomePage(),
         ReportPage(),
-
         Text('News Page'),
         SettingPage(),
       ];
