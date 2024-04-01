@@ -1,4 +1,5 @@
 import 'package:ayolapor/homepage.dart';
+import 'package:ayolapor/reportpage.dart';
 import 'package:ayolapor/settingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
