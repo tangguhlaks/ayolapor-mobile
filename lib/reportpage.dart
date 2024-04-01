@@ -102,10 +102,17 @@ class _ReportPageState extends State<ReportPage> {
                   'Keterangan:',
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(7),
+                    border: Border.all(color: Colors.grey),
                   ),
+                  height: 100,
+                  child:TextField(
+                  decoration: InputDecoration(
+                    border: InputBorder.none,
+                  ),
+                ),
                 ),
                 SizedBox(
                   height: 132,
