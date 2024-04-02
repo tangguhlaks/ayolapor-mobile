@@ -50,7 +50,7 @@ class BeritaPageKms extends StatelessWidget {
         backgroundColor: Colors.red,
       ),
       body: ListView.builder(
-        itemCount: 5,
+        itemCount: 3,
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),

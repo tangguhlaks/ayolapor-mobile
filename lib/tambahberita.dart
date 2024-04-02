@@ -76,6 +76,26 @@ class _TambahBeritaFormState extends State<TambahBeritaForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
+        // Upload Image
+        InkWell(
+          onTap: () {
+            // Tindakan ketika gambar diupload
+          },
+          child: Container(
+            height: 150,
+            width: double.infinity,
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Icon(
+              Icons.add_a_photo,
+              size: 48,
+              color: Colors.grey,
+            ),
+          ),
+        ),
+        SizedBox(height: 16.0), // Spasi antara field
         // Input judul
         Container(
           decoration: BoxDecoration(
