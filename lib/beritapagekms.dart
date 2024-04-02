@@ -51,7 +51,7 @@ class BeritaPageKms extends StatelessWidget {
             Colors.red, // Atur warna latar belakang tombol menjadi merah
       ),
       body: ListView.builder(
-        itemCount: 5,
+        itemCount: 3,
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
