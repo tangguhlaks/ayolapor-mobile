@@ -29,7 +29,7 @@ class SettingPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Preferensi',
+          'Setting',
           style: TextStyle(
             color: Colors.red,
             fontWeight: FontWeight.bold,

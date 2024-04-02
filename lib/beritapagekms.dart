@@ -23,20 +23,11 @@ class BeritaPageKms extends StatelessWidget {
           'Berita',
           style: TextStyle(
             color: Colors.red,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.keyboard_arrow_left,
-            size: 24,
-            color: Colors.red,
-          ),
-          onPressed: () {
-            // Tindakan ketika tombol ditekan
-          },
-        ),
-        backgroundColor: Colors.white,
+        elevation: 4,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

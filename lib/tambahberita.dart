@@ -23,10 +23,17 @@ class TambahBeritaPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Tambah Berita'),
+        title: const Text(
+          'Tambah Berita',
+          style: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
         leading: IconButton(
           icon: Icon(
-            Icons.arrow_back, // Menggunakan ikon tombol kembali Android
+            Icons.keyboard_arrow_left,
             color: Colors.red,
             size: 24,
           ),
@@ -34,6 +41,7 @@ class TambahBeritaPage extends StatelessWidget {
             Navigator.pop(context); // Kembali ke tampilan sebelumnya
           },
         ),
+        elevation: 4,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
