@@ -13,14 +13,6 @@ class ReportPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.keyboard_arrow_left,
-            color: Colors.red,
-            size: 24,
-          ),
-          onPressed: () {},
-        ),
         actions: <Widget>[
           IconButton(
             icon: Icon(
@@ -43,11 +35,14 @@ class ReportPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ReportPage()), // Navigate to TambahLaporanPage
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            ReportPage()), // Navigate to TambahLaporanPage
                   );
                 },
                 icon: Icon(Icons.add, color: Colors.white),
-                label: Text('Tambah Laporan', style: TextStyle(color: Colors.white)),
+                label: Text('Tambah Laporan',
+                    style: TextStyle(color: Colors.white)),
                 style: ButtonStyle(
                   minimumSize: MaterialStateProperty.all<Size>(Size(148, 31)),
                   backgroundColor: MaterialStateProperty.all<Color>(
@@ -55,7 +50,6 @@ class ReportPage extends StatelessWidget {
                   ),
                 ),
               ),
-
               SizedBox(height: 8),
               Column(
                 children: [
@@ -67,8 +61,8 @@ class ReportPage extends StatelessWidget {
                       'Sudah Ditindak Lanjut Dosen Wali'),
                   buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                       'Save Draft'),
-                  buildOption(
-                      'Lord Tangguh', Icons.more_vert, '20 Mei 2023', 'Selesai'),
+                  buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                      'Selesai'),
                   buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                       'Laporan Dibatalkan'),
                 ],
@@ -81,9 +75,6 @@ class ReportPage extends StatelessWidget {
     );
   }
 }
-
-
-
 
 Widget buildOption(String text, IconData icon, String date, String status) {
   Color statusColor = Colors.red;
