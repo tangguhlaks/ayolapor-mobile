@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'tambahberita.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +12,7 @@ class MyApp extends StatelessWidget {
       home: BeritaPageKms(),
       routes: {
         '/tambah_berita': (context) =>
-            TambahBeritaPageKms(), // Define the route for TambahBeritaPageKms
+            TambahBeritaPage(), // Definisikan rute /tambah_berita ke TambahBeritaPage
       },
     );
   }
@@ -33,21 +34,18 @@ class BeritaPageKms extends StatelessWidget {
           icon: Icon(
             Icons.keyboard_arrow_left,
             size: 24,
+            color: Colors.red,
           ),
           onPressed: () {
             // Tindakan ketika tombol ditekan
           },
-          color: Colors.red,
         ),
-        iconTheme: IconThemeData(
-          color: Colors.red,
-        ),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: Colors.white,
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(
-              context, '/tambah_berita'); // Navigate to TambahBeritaPageKms
+          // Navigasi ke halaman TambahBeritaPage saat tombol ditekan
+          Navigator.pushNamed(context, '/tambah_berita');
         },
         child: Icon(Icons.add),
         backgroundColor: Colors.red,
@@ -81,26 +79,6 @@ class BeritaPageKms extends StatelessWidget {
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class TambahBeritaPageKms extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Tambah Berita',
-          style: TextStyle(
-            color: Colors.red,
-          ),
-        ),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      ),
-      body: Center(
-        child: Text('Halaman Tambah Berita'),
       ),
     );
   }

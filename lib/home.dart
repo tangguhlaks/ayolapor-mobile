@@ -5,6 +5,11 @@ import 'package:ayolapor/settingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+<<<<<<< HEAD
+=======
+import 'reportpage.dart'; // Import the HomePage widget from homepage.dart
+import 'beritapagekms.dart'; // Import the HomePage widget from homepage.dart
+>>>>>>> b113caaf0ac60cf2e97009bb2f3b0abab68a0b65
 import 'main.dart'; // Import the HomePage widget from homepage.dart
 
 void main() async {
@@ -64,9 +69,9 @@ static List<Widget> _widgetOptions(String role) {
       ];
     case 'Kemahasiswaan':
       return <Widget>[
-        BeritaPage(),
-        ReportPage(),
         HomePage(),
+        ReportPage(),
+        BeritaPageKms(),
         SettingPage(),
       ];
     default:
@@ -89,7 +94,7 @@ static List<Widget> _widgetOptions(String role) {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _widgetOptions(username)[_selectedIndex],
+        child: _widgetOptions(role)[_selectedIndex],
       ),
       bottomNavigationBar: SafeArea(
         child: BottomNavigationBar(
