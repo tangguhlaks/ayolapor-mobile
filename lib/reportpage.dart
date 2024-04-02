@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'TambahLaporanPage.dart';
 
 class ReportPage extends StatelessWidget {
   @override
@@ -33,44 +34,49 @@ class ReportPage extends StatelessWidget {
         ],
         elevation: 4,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ElevatedButton.icon(
-              onPressed: () {
-                // Implement your button action here
-              },
-              icon: Icon(Icons.add, color: Colors.white),
-              label:
-                  Text('Tambah Laporan', style: TextStyle(color: Colors.white)),
-              style: ButtonStyle(
-                minimumSize: MaterialStateProperty.all<Size>(Size(148, 31)),
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  const Color.fromARGB(255, 229, 75, 75),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ElevatedButton.icon(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TambahLaporanPage()), // Navigate to TambahLaporanPage
+                  );
+                },
+                icon: Icon(Icons.add, color: Colors.white),
+                label: Text('Tambah Laporan', style: TextStyle(color: Colors.white)),
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all<Size>(Size(148, 31)),
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color.fromARGB(255, 229, 75, 75),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 8),
-            Column(
-              children: [
-                buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                    'Menunggu Tindak Lanjut Kemahasiswaan'),
-                buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                    'Menunggu Tindak Lanjut Dosen Wali'),
-                buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                    'Sudah Ditindak Lanjut Dosen Wali'),
-                buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                    'Save Draft'),
-                buildOption(
-                    'Lord Tangguh', Icons.more_vert, '20 Mei 2023', 'Selesai'),
-                buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                    'Laporan Dibatalkan'),
-              ],
-            ),
-            SizedBox(height: 8),
-          ],
+
+              SizedBox(height: 8),
+              Column(
+                children: [
+                  buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                      'Menunggu Tindak Lanjut Kemahasiswaan'),
+                  buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                      'Menunggu Tindak Lanjut Dosen Wali'),
+                  buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                      'Sudah Ditindak Lanjut Dosen Wali'),
+                  buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                      'Save Draft'),
+                  buildOption(
+                      'Lord Tangguh', Icons.more_vert, '20 Mei 2023', 'Selesai'),
+                  buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                      'Laporan Dibatalkan'),
+                ],
+              ),
+              SizedBox(height: 8),
+            ],
+          ),
         ),
       ),
     );
