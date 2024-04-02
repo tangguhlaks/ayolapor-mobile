@@ -1,3 +1,4 @@
+import 'package:ayolapor/beritapage.dart';
 import 'package:ayolapor/homepage.dart';
 import 'package:ayolapor/reportpage.dart';
 import 'package:ayolapor/settingpage.dart';
@@ -45,7 +46,7 @@ class _HomeState extends State<Home> {
   static List<Widget> _widgetOptions(String username) => <Widget>[
         HomePage(),
         ReportPage(),
-        Text('News Page'),
+        BeritaPage(),
         SettingPage(),
       ];
 
