@@ -10,7 +10,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: BeritaPage(),
       routes: {
-        '/tambah_berita': (context) => TambahBeritaPage(), // Define the route for TambahBeritaPage
+        '/tambah_berita': (context) =>
+            TambahBeritaPage(), // Define the route for TambahBeritaPage
       },
     );
   }
@@ -25,9 +26,11 @@ class BeritaPage extends StatelessWidget {
           'Berita',
           style: TextStyle(
             color: Colors.red,
+            fontWeight: FontWeight.bold,
           ),
         ),
         centerTitle: true,
+        elevation: 4,
       ),
       body: ListView.builder(
         itemCount: 3,
