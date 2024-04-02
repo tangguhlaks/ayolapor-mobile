@@ -36,28 +36,49 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   String username = '';
+  String role = '';
 
   @override
   void initState() {
     super.initState();
-    _getUsername();
+    _getDataSession();
   }
 
-  _getUsername() async {
+  _getDataSession() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       username = prefs.getString('username') ?? '';
+      role = prefs.getString('role') ?? '';
     });
   }
 
   int _selectedIndex = 0;
 
-  static List<Widget> _widgetOptions(String username) => <Widget>[
+static List<Widget> _widgetOptions(String role) {
+  switch (role) {
+    case 'Dosen Wali':
+      return <Widget>[
+        ReportPage(),
+        HomePage(),
+        BeritaPage(),
+        SettingPage(),
+      ];
+    case 'Kemahasiswaan':
+      return <Widget>[
+        BeritaPage(),
+        ReportPage(),
+        HomePage(),
+        SettingPage(),
+      ];
+    default:
+      return <Widget>[
         HomePage(),
         ReportPage(),
         BeritaPage(),
         SettingPage(),
       ];
+  }
+}
 
   void _onItemTapped(int index) {
     setState(() {
