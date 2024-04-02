@@ -24,6 +24,16 @@ class TambahBeritaPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Tambah Berita'),
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back, // Menggunakan ikon tombol kembali Android
+            color: Colors.red,
+            size: 24,
+          ),
+          onPressed: () {
+            Navigator.pop(context); // Kembali ke tampilan sebelumnya
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,26 +77,45 @@ class _TambahBeritaFormState extends State<TambahBeritaForm> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         // Input judul
-        TextField(
-          controller: _judulController,
-          decoration: InputDecoration(
-            labelText: 'Judul',
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: TextField(
+            controller: _judulController,
+            decoration: InputDecoration(
+              labelText: 'Judul',
+              contentPadding: EdgeInsets.all(8.0),
+              border: InputBorder.none,
+            ),
           ),
         ),
         SizedBox(height: 16.0), // Spasi antara field
         // Input isi berita
-        TextField(
-          controller: _isiController,
-          maxLines: null, // Maksimum baris tidak terbatas
-          decoration: InputDecoration(
-            labelText: 'Isi Berita',
+        Container(
+          decoration: BoxDecoration(
+            border: Border.all(color: Colors.grey),
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          child: TextField(
+            controller: _isiController,
+            maxLines: null, // Maksimum baris tidak terbatas
+            decoration: InputDecoration(
+              labelText: 'Isi Berita',
+              contentPadding: EdgeInsets.all(8.0),
+              border: InputBorder.none,
+            ),
           ),
         ),
         SizedBox(height: 16.0), // Spasi antara field
         // Tombol untuk submit
         ElevatedButton(
           onPressed: _submitForm,
-          child: Text('Tambah Berita'),
+          child: Text('Tambah Berita', style: TextStyle(color: Colors.white)),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+          ),
         ),
       ],
     );

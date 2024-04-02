@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'TambahLaporanPage.dart';
 
 class ReportPage extends StatelessWidget {
   @override
@@ -44,7 +43,7 @@ class ReportPage extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => TambahLaporanPage()), // Navigate to TambahLaporanPage
+                    MaterialPageRoute(builder: (context) => ReportPage()), // Navigate to TambahLaporanPage
                   );
                 },
                 icon: Icon(Icons.add, color: Colors.white),

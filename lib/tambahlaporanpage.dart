@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
 
-void main() {
-  runApp(MaterialApp(home: TambahLaporanPage()));
+class AddReportPage extends StatefulWidget {
+  @override
+  _AddReportPageState createState() => _AddReportPageState();
 }
 
-class TambahLaporanPage extends StatelessWidget {
+class _AddReportPageState extends State<AddReportPage> {
+  List<String> items = ['Pelecehan', 'Seksual', 'Bullying'];
+  String? selectedItem;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Tambah Laporan',
+          'Buat Laporan',
           style: TextStyle(
-            color: Colors.red,
+            color: Color.fromARGB(255, 229, 75, 75),
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -20,88 +24,121 @@ class TambahLaporanPage extends StatelessWidget {
         leading: IconButton(
           icon: Icon(
             Icons.keyboard_arrow_left,
-            color: Colors.red,
+            color: Color.fromARGB(255, 229, 75, 75),
             size: 24,
           ),
-          onPressed: () {
-            Navigator.pop(context); // Kembali ke tampilan sebelumnya
-          },
+          onPressed: () {},
         ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(
+              Icons.announcement,
+              color: Color.fromARGB(255, 229, 75, 75),
+              size: 24,
+            ),
+            onPressed: () {},
+          )
+        ],
         elevation: 4,
       ),
-      body: TambahLaporanForm(),
-    );
-  }
-}
-
-class TambahLaporanForm extends StatefulWidget {
-  @override
-  _TambahLaporanFormState createState() => _TambahLaporanFormState();
-}
-
-class _TambahLaporanFormState extends State<TambahLaporanForm> {
-  TextEditingController _buktiController = TextEditingController();
-  TextEditingController _deskripsiController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            'Upload Bukti',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Jenis Laporan:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
-          ),
-          SizedBox(height: 8),
-          TextFormField(
-            controller: _buktiController,
-            decoration: InputDecoration(
-              hintText: 'Upload Bukti',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color: Colors.red,
+            DropdownButtonFormField<String>(
+              iconEnabledColor: Color.fromARGB(255, 229, 75, 75),
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                  borderSide: BorderSide(width: 3, color: Colors.grey),
+                ),
+              ),
+              value: selectedItem,
+              items: items
+                  .map((item) => DropdownMenuItem<String>(
+                        value: item,
+                        child: Text(
+                          item,
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Color.fromARGB(255, 229, 75, 75),
+                          ),
+                        ),
+                      ))
+                  .toList(),
+              onChanged: (item) {
+                setState(() {
+                  selectedItem = item;
+                });
+              },
+            ),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: ElevatedButton.icon(
+                onPressed: () {
+                  // Implement your button action here
+                },
+                icon: Icon(Icons.add, color: Colors.white),
+                label:
+                    Text('Upload Bukti', style: TextStyle(color: Colors.white)),
+                style: ButtonStyle(
+                  minimumSize: MaterialStateProperty.all<Size>(Size(148, 31)),
+                  backgroundColor: MaterialStateProperty.all<Color>(
+                    const Color.fromARGB(255, 229, 75, 75),
+                  ),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 24),
-          Text(
-            'Deskripsi',
-            style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.bold,
-              color: Colors.black,
+            SizedBox(height: 16),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Upload File Kamu',
+              ),
             ),
-          ),
-          SizedBox(height: 8),
-          TextFormField(
-            controller: _deskripsiController,
-            maxLines: 4,
-            decoration: InputDecoration(
-              hintText: 'Deskripsi Kasus',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-                borderSide: BorderSide(
-                  color: Colors.red,
+            SizedBox(height: 16),
+            Text(
+              'Keterangan:',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // Implement your first button action here
+              },
+              child: Text(
+                'Save As Draft',
+                style: TextStyle(color: const Color.fromARGB(255, 229, 75, 75)),
+              ),
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all<Size>(Size(541, 41)),
+              ),
+            ),
+            SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                // Implement your second button action here
+              },
+              child: Text('Simpan & Laporkan', style: TextStyle(color: Colors.white)),
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all<Size>(Size(541, 41)),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  const Color.fromARGB(255, 229, 75, 75),
                 ),
               ),
             ),
-          ),
-          SizedBox(height: 24),
-          ElevatedButton(
-            onPressed: () {
-              // Add your submit logic here
-            },
-            child: Text('Kirim'),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
