@@ -3,6 +3,7 @@ import 'package:ayolapor/homepage.dart';
 import 'package:ayolapor/reportpage.dart';
 import 'package:ayolapor/settingpage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'reportpage.dart'; // Import the HomePage widget from homepage.dart
@@ -60,14 +61,14 @@ static List<Widget> _widgetOptions(String role) {
     case 'Dosen Wali':
       return <Widget>[
         ReportPage(),
-        HomePage(),
+        Text('Tinjau Laporan'),
         BeritaPage(),
         SettingPage(),
       ];
     case 'Kemahasiswaan':
       return <Widget>[
         HomePage(),
-        ReportPage(),
+        Text('Tinjau Laporan'),
         BeritaPageKms(),
         SettingPage(),
       ];

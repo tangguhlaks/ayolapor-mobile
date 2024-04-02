@@ -10,10 +10,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: BeritaPageKms(),
-      routes: {
-        '/tambah_berita': (context) =>
-            TambahBeritaPage(), // Definisikan rute '/tambah_berita'
-      },
     );
   }
 }
@@ -45,7 +41,10 @@ class BeritaPageKms extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           // Navigasi ke halaman TambahBeritaPage saat tombol ditekan
-          Navigator.pushNamed(context, '/tambah_berita');
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => TambahBeritaPage()),
+          );
         },
         child: Icon(Icons.add),
         backgroundColor:
