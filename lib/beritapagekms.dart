@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'tambahberita.dart';
+import 'tambahberita.dart'; // Impor file tambahberita.dart
 
 void main() {
   runApp(MyApp());
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
       home: BeritaPageKms(),
       routes: {
         '/tambah_berita': (context) =>
-            TambahBeritaPage(), // Definisikan rute /tambah_berita ke TambahBeritaPage
+            TambahBeritaPage(), // Definisikan rute '/tambah_berita'
       },
     );
   }
@@ -48,7 +48,8 @@ class BeritaPageKms extends StatelessWidget {
           Navigator.pushNamed(context, '/tambah_berita');
         },
         child: Icon(Icons.add),
-        backgroundColor: Colors.red,
+        backgroundColor:
+            Colors.red, // Atur warna latar belakang tombol menjadi merah
       ),
       body: ListView.builder(
         itemCount: 5,

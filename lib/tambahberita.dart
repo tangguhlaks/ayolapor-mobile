@@ -45,20 +45,19 @@ class _TambahBeritaFormState extends State<TambahBeritaForm> {
 
   // Method untuk menghandle submit form
   void _submitForm() {
-    // Lakukan sesuatu dengan data yang di-input
+    // Mendapatkan nilai dari controller dan menyimpannya dalam variabel lokal
     String judul = _judulController.text;
     String isi = _isiController.text;
-    // Di sini bisa ditambahkan logika untuk mengirim data ke server atau melakukan aksi lainnya
-    // Misalnya menyimpan berita ke database
+
+    // Lakukan sesuatu dengan data yang di-input
+    // Misalnya, menampilkan nilai judul dan isi dalam pesan Snackbar
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Judul: $judul, Isi: $isi')),
+    );
 
     // Setelah submit, kosongkan field input
     _judulController.clear();
     _isiController.clear();
-
-    // Tampilkan pesan sukses atau aksi lainnya
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Berita berhasil ditambahkan')),
-    );
   }
 
   @override
