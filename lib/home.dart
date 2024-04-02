@@ -5,9 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'reportpage.dart'; // Import the HomePage widget from homepage.dart
+import 'main.dart'; // Import the HomePage widget from homepage.dart
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure that plugins are initialized
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? username = prefs.getString('username');
+  String? role = prefs.getString('role');
+
+  runApp(MaterialApp(
+    home: username != null && role != null ? Home() : LoginScreen(),
+    debugShowCheckedModeBanner: false, // Remove debug banner
+  ));
 }
 
 class MyApp extends StatelessWidget {

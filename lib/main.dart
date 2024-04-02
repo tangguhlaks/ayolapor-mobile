@@ -164,9 +164,14 @@ class _LoginFormState extends State<LoginForm> {
   }
 }
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Ensure that plugins are initialized
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+  String? username = prefs.getString('username');
+  String? role = prefs.getString('role');
+
   runApp(MaterialApp(
-    home: LoginScreen(),
+    home: username != null && role != null ? Home() : LoginScreen(),
     debugShowCheckedModeBanner: false, // Remove debug banner
   ));
 }
