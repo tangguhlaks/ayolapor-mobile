@@ -28,30 +28,9 @@ class BeritaPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        leading: IconButton(
-          icon: Icon(
-            Icons.keyboard_arrow_left,
-            size: 24,
-          ),
-          onPressed: () {
-            // Tindakan ketika tombol ditekan
-          },
-          color: Colors.red,
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.red,
-        ),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context, '/tambah_berita'); // Navigate to TambahBeritaPage
-        },
-        child: Icon(Icons.add),
-        backgroundColor: Colors.red,
       ),
       body: ListView.builder(
-        itemCount: 5,
+        itemCount: 3,
         itemBuilder: (context, index) {
           return Padding(
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
