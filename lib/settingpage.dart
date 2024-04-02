@@ -46,8 +46,6 @@ class SettingPage extends StatelessWidget {
           children: [
             buildOption('FAQ', Icons.arrow_forward, context),
             buildOption('Laporkan Bug & Saran', Icons.arrow_forward, context),
-            buildToggleOption('Rekam Cepat'),
-            buildToggleOption('Mode Gelap'),
             buildOption('Hubungi Kami', Icons.phone, context),
             buildOption('Profile', Icons.arrow_forward, context),
             SizedBox(height: 8),
@@ -70,58 +68,39 @@ class SettingPage extends StatelessWidget {
     );
   }
 
-Widget buildOption(String text, IconData icon, BuildContext context) {
-  return InkWell(
-    onTap: () {
-      if (text == 'Profile') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => ProfilePage()),
-        );
-      } else if (text == 'Laporkan Bug & Saran') {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => BugReportPage()),
-        );
-      } else if (text == 'FAQ') { // Tambahkan kondisi ini
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => FaqPage()), // Navigasi ke halaman FaqPage
-        );
-      }
-    },
-    child: Container(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey),
-      ),
-      child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16),
-        title: Text(text, style: TextStyle(color: Colors.red)),
-        trailing: Icon(icon, color: Colors.red, size: 20),
-      ),
-    ),
-  );
-}
-
-
-
-  Widget buildToggleOption(String text) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey),
-      ),
-      child: SwitchListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16),
-        title: Text(text, style: TextStyle(color: Colors.red)),
-        value: true,
-        onChanged: (value) {
-          // Handle toggle change
-        },
-        activeColor: Colors.red,
+  Widget buildOption(String text, IconData icon, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        if (text == 'Profile') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+          );
+        } else if (text == 'Laporkan Bug & Saran') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => BugReportPage()),
+          );
+        } else if (text == 'FAQ') {
+          // Tambahkan kondisi ini
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => FaqPage()), // Navigasi ke halaman FaqPage
+          );
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey),
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+          title: Text(text, style: TextStyle(color: Colors.red)),
+          trailing: Icon(icon, color: Colors.red, size: 20),
+        ),
       ),
     );
   }
