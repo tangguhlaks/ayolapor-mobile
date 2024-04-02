@@ -26,21 +26,16 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Disable back button
-        title: Container(
-          padding: EdgeInsets.symmetric(
-              vertical: 1, horizontal: 18), // Adjust padding
-          decoration: BoxDecoration(
+        title: const Text(
+          'Preferensi',
+          style: TextStyle(
             color: Colors.red,
-            borderRadius: BorderRadius.circular(10), // Adjust border radius
-          ),
-          child: Text(
-            'Preferensi',
-            style: TextStyle(color: Colors.white),
+            fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.transparent, // Make app bar transparent
-        elevation: 0, // Remove app bar elevation
+        centerTitle: true,
+        elevation: 4,
+        automaticallyImplyLeading: false, // Menghilangkan tombol back
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
