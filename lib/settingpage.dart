@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'profile.dart';
 
 void main() {
   runApp(MyApp());
@@ -25,32 +26,28 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false, // Disable back button
-        title: Container(
-          padding: EdgeInsets.symmetric(
-              vertical: 1, horizontal: 18), // Adjust padding
-          decoration: BoxDecoration(
+        title: const Text(
+          'Preferensi',
+          style: TextStyle(
             color: Colors.red,
-            borderRadius: BorderRadius.circular(10), // Adjust border radius
-          ),
-          child: Text(
-            'Preferensi',
-            style: TextStyle(color: Colors.white),
+            fontWeight: FontWeight.bold,
           ),
         ),
-        backgroundColor: Colors.transparent, // Make app bar transparent
-        elevation: 0, // Remove app bar elevation
+        centerTitle: true,
+        elevation: 4,
+        automaticallyImplyLeading: false, // Menghilangkan tombol back
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            buildOption('FAQ', Icons.arrow_forward),
-            buildOption('Laporkan Bug & Saran', Icons.arrow_forward),
+            buildOption('FAQ', Icons.arrow_forward, context),
+            buildOption('Laporkan Bug & Saran', Icons.arrow_forward, context),
             buildToggleOption('Rekam Cepat'),
             buildToggleOption('Mode Gelap'),
-            buildOption('Hubungi Kami', Icons.phone),
+            buildOption('Hubungi Kami', Icons.phone, context),
+            buildOption('Profile', Icons.arrow_forward, context),
             SizedBox(height: 8),
             ElevatedButton(
               onPressed: () {
@@ -71,17 +68,27 @@ class SettingPage extends StatelessWidget {
     );
   }
 
-  Widget buildOption(String text, IconData icon) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.grey),
-      ),
-      child: ListTile(
-        contentPadding: EdgeInsets.symmetric(horizontal: 16),
-        title: Text(text, style: TextStyle(color: Colors.red)),
-        trailing: Icon(icon, color: Colors.red, size: 20),
+  Widget buildOption(String text, IconData icon, BuildContext context) {
+    return InkWell(
+      onTap: () {
+        if (text == 'Profile') {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+          );
+        }
+      },
+      child: Container(
+        margin: EdgeInsets.symmetric(vertical: 4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: Colors.grey),
+        ),
+        child: ListTile(
+          contentPadding: EdgeInsets.symmetric(horizontal: 16),
+          title: Text(text, style: TextStyle(color: Colors.red)),
+          trailing: Icon(icon, color: Colors.red, size: 20),
+        ),
       ),
     );
   }

@@ -13,7 +13,8 @@ class LoginScreen extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('background_image.jpg'), // Replace 'background_image.jpg' with your image file path
+            image: AssetImage(
+                'background_image.jpg'), // Replace 'background_image.jpg' with your image file path
             fit: BoxFit.cover,
           ),
         ),
@@ -34,31 +35,31 @@ class _LoginFormState extends State<LoginForm> {
   String _selectedRole = 'Mahasiswa';
   List<String> _roles = ['Mahasiswa', 'Dosen Wali', 'Kemahasiswaan'];
 
- void _login() async {
-  String username = _usernameController.text;
-  String password = _passwordController.text;
-  String role = _selectedRole;
+  void _login() async {
+    String username = _usernameController.text;
+    String password = _passwordController.text;
+    String role = _selectedRole;
 
-  Map<String, dynamic> body = {
-    'username': username,
-    'password': password,
-    'role': role,
-  };
+    Map<String, dynamic> body = {
+      'username': username,
+      'password': password,
+      'role': role,
+    };
 
-  // Lakukan panggilan API
-  var url = Uri.parse(GlobalsConfig.url_api+'login');
-  var response = await http.post(url, body: body);
-  var responseBody = json.decode(response.body);
-  if (responseBody['status_auth']) {
-     SharedPreferences prefs = await SharedPreferences.getInstance();
+    // Lakukan panggilan API
+    var url = Uri.parse(GlobalsConfig.url_api + 'login');
+    var response = await http.post(url, body: body);
+    var responseBody = json.decode(response.body);
+    if (responseBody['status_auth']) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('username', username);
       prefs.setString('role', role);
 
-     Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
-  }else{
-    print(responseBody);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Home()));
+    } else {
+      print(responseBody);
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -69,22 +70,23 @@ class _LoginFormState extends State<LoginForm> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(7.0)
-            ),
+                color: Colors.white, borderRadius: BorderRadius.circular(7.0)),
             width: 200,
             child: Image(image: AssetImage("logo.png")),
           ),
           SizedBox(height: 50),
           Padding(
-            padding: EdgeInsets.only(bottom: 5.0), // Padding between dropdown and text fields
+            padding: EdgeInsets.only(
+                bottom: 5.0), // Padding between dropdown and text fields
             child: Container(
               decoration: BoxDecoration(
                 color: Colors.white, // White background color
-                borderRadius: BorderRadius.circular(10.0), // Optional: rounded corners
+                borderRadius:
+                    BorderRadius.circular(10.0), // Optional: rounded corners
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 15.0), // Padding inside the container
+                padding: EdgeInsets.symmetric(
+                    horizontal: 15.0), // Padding inside the container
                 child: DropdownButtonFormField(
                   value: _selectedRole,
                   onChanged: (newValue) {
@@ -106,10 +108,12 @@ class _LoginFormState extends State<LoginForm> {
           Container(
             decoration: BoxDecoration(
               color: Colors.white, // White background color
-              borderRadius: BorderRadius.circular(10.0), // Optional: rounded corners
+              borderRadius:
+                  BorderRadius.circular(10.0), // Optional: rounded corners
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0), // Padding inside the container
+              padding: EdgeInsets.symmetric(
+                  horizontal: 15.0), // Padding inside the container
               child: TextField(
                 controller: _usernameController,
                 decoration: InputDecoration(
@@ -123,10 +127,12 @@ class _LoginFormState extends State<LoginForm> {
           Container(
             decoration: BoxDecoration(
               color: Colors.white, // White background color
-              borderRadius: BorderRadius.circular(10.0), // Optional: rounded corners
+              borderRadius:
+                  BorderRadius.circular(10.0), // Optional: rounded corners
             ),
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 15.0), // Padding inside the container
+              padding: EdgeInsets.symmetric(
+                  horizontal: 15.0), // Padding inside the container
               child: TextField(
                 controller: _passwordController,
                 decoration: InputDecoration(
@@ -138,21 +144,20 @@ class _LoginFormState extends State<LoginForm> {
             ),
           ),
           SizedBox(height: 20),
-         SizedBox(
-          width: double.infinity,
-          height: 50, // Mengatur tinggi tombol
-          child: ElevatedButton(
-            onPressed: _login,
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all<Color>(Colors.red)
+          SizedBox(
+            width: double.infinity,
+            height: 50, // Mengatur tinggi tombol
+            child: ElevatedButton(
+              onPressed: _login,
+              style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.red)),
+              child: Text(
+                'Login',
+                style: TextStyle(color: Colors.white),
               ),
-            child: Text('Login',
-                    style: TextStyle(
-                      color: Colors.white
-                    ),
             ),
           ),
-        ),
         ],
       ),
     );

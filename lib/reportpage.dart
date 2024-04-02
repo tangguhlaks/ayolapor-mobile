@@ -1,146 +1,129 @@
 import 'package:flutter/material.dart';
 
-class ReportPage extends StatefulWidget {
-  @override
-  _ReportPageState createState() => _ReportPageState();
-}
-
-class _ReportPageState extends State<ReportPage> {
-  List<String> items = ['Pelecehan', 'Seksual', 'Bullying'];
-  String? selectedItem;
-
+class ReportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Buat Laporan',
+          'Riwayat Laporan',
           style: TextStyle(
-              color: Color.fromARGB(255, 229, 75, 75),
-              fontWeight: FontWeight.bold),
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: Icon(Icons.keyboard_arrow_left,
-              color: Color.fromARGB(255, 229, 75, 75), size: 24),
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.red,
+            size: 24,
+          ),
           onPressed: () {},
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.announcement,
-                color: Color.fromARGB(255, 229, 75, 75), size: 24),
+            icon: Icon(
+              Icons.announcement,
+              color: Colors.red,
+              size: 24,
+            ),
             onPressed: () {},
           )
         ],
         elevation: 4,
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Jenis Laporan:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ElevatedButton.icon(
+              onPressed: () {
+                // Implement your button action here
+              },
+              icon: Icon(Icons.add, color: Colors.white),
+              label:
+                  Text('Tambah Laporan', style: TextStyle(color: Colors.white)),
+              style: ButtonStyle(
+                minimumSize: MaterialStateProperty.all<Size>(Size(148, 31)),
+                backgroundColor: MaterialStateProperty.all<Color>(
+                  const Color.fromARGB(255, 229, 75, 75),
                 ),
-                DropdownButtonFormField<String>(
-                  iconEnabledColor: Color.fromARGB(255, 229, 75, 75),
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(4),
-                      borderSide: BorderSide(width: 3, color: Colors.grey),
-                    ),
-                  ),
-                  value: selectedItem,
-                  items: items
-                      .map((item) => DropdownMenuItem<String>(
-                            value: item,
-                            child: Text(item,
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: Color.fromARGB(255, 229, 75, 75))),
-                          ))
-                      .toList(),
-                  onChanged: (item) {
-                    setState(() {
-                      selectedItem = item;
-                    });
-                  },
-                ),
-                Align(
-                  alignment: Alignment.centerLeft,
-                  child: ElevatedButton.icon(
-                    onPressed: () {
-                      // Implement your button action here
-                    },
-                    icon: Icon(Icons.add, color: Colors.white),
-                    label: Text('Upload Bukti',
-                        style: TextStyle(color: Colors.white)),
-                    style: ButtonStyle(
-                      minimumSize:
-                          MaterialStateProperty.all<Size>(Size(148, 31)),
-                      backgroundColor: MaterialStateProperty.all<Color>(
-                          const Color.fromARGB(255, 229, 75, 75)),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 16),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Upload File Kamu',
-                  ),
-                ),
-                SizedBox(
-                  height: 112,
-                  width: 358,
-                ),
-                Text(
-                  'Keterangan:',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(
-                  height: 132,
-                  width: 358,
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement your first button action here
-                  },
-                  child: Text('Save As Draft'),
-                  style: ButtonStyle(
-                    minimumSize:
-                          MaterialStateProperty.all<Size>(Size(541, 41)), 
-                  ),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    // Implement your second button action here
-                  },
-                  child: Text('Simpan & Laporkan'),
-                  style: ButtonStyle(
-                    minimumSize:
-                          MaterialStateProperty.all<Size>(Size(541, 41)),
-                    backgroundColor: MaterialStateProperty.all<Color>(
-                      const Color.fromARGB(255, 229, 75, 75), 
-                    ),
-                  ),
-                ),
+              ),
+            ),
+            SizedBox(height: 8),
+            Column(
+              children: [
+                buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                    'Menunggu Tindak Lanjut Kemahasiswaan'),
+                buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                    'Menunggu Tindak Lanjut Dosen Wali'),
+                buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                    'Sudah Ditindak Lanjut Dosen Wali'),
+                buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                    'Save Draft'),
+                buildOption(
+                    'Lord Tangguh', Icons.more_vert, '20 Mei 2023', 'Selesai'),
+                buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+                    'Laporan Dibatalkan'),
               ],
             ),
-          )
-        ],
+            SizedBox(height: 8),
+          ],
+        ),
       ),
     );
   }
+}
+
+
+
+
+Widget buildOption(String text, IconData icon, String date, String status) {
+  Color statusColor = Colors.red;
+  if (status == 'Selesai' || status == 'Sudah Ditindak Lanjut Dosen Wali') {
+    statusColor = Colors.green;
+  } else if (status == 'Save Draft') {
+    statusColor = Colors.yellow;
+  }
+
+  return Container(
+    margin: EdgeInsets.symmetric(vertical: 4),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(10),
+      border: Border.all(color: Colors.grey),
+    ),
+    child: ListTile(
+      contentPadding: EdgeInsets.symmetric(horizontal: 16),
+      title: Text(text,
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+      subtitle: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(date, style: TextStyle(fontWeight: FontWeight.w100)),
+          Container(
+            padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
+            decoration: BoxDecoration(
+              color: Colors.grey[200],
+              borderRadius: BorderRadius.circular(5),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 1,
+                  blurRadius: 2,
+                  offset: Offset(0, 1), // changes position of shadow
+                ),
+              ],
+            ),
+            child: Text(
+              status,
+              style: TextStyle(color: statusColor),
+            ),
+          ),
+        ],
+      ),
+      trailing: Icon(icon, color: Colors.red, size: 24),
+    ),
+  );
 }
