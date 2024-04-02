@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'reportpage.dart'; // Import the HomePage widget from homepage.dart
+import 'beritapagekms.dart'; // Import the HomePage widget from homepage.dart
 import 'main.dart'; // Import the HomePage widget from homepage.dart
 
 void main() async {
@@ -65,9 +66,9 @@ static List<Widget> _widgetOptions(String role) {
       ];
     case 'Kemahasiswaan':
       return <Widget>[
-        BeritaPage(),
-        ReportPage(),
         HomePage(),
+        ReportPage(),
+        BeritaPageKms(),
         SettingPage(),
       ];
     default:
@@ -90,7 +91,7 @@ static List<Widget> _widgetOptions(String role) {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: _widgetOptions(username)[_selectedIndex],
+        child: _widgetOptions(role)[_selectedIndex],
       ),
       bottomNavigationBar: SafeArea(
         child: BottomNavigationBar(
