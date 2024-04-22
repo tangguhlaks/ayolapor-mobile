@@ -1,3 +1,4 @@
+import 'package:ayolapor/home.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -12,6 +13,8 @@ class MyApp extends StatelessWidget {
       routes: {
         '/tambah_berita': (context) =>
             TambahBeritaPage(), // Define the route for TambahBeritaPage
+        '/home': (context) => Home(), // Define the route for HomePage
+        // other routes
       },
     );
   }
@@ -30,6 +33,19 @@ class BeritaPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.red,
+            size: 24,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            ); // Menggunakan Navigator.pushNamed
+          },
+        ),
         elevation: 4,
       ),
       body: ListView.builder(

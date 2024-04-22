@@ -1,4 +1,5 @@
 import 'package:ayolapor/buatlaporan.dart';
+import 'package:ayolapor/home.dart';
 import 'package:ayolapor/detaillaporan.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,19 @@ class ReportPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.red,
+            size: 24,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            ); // Menggunakan Navigator.pushNamed
+          },
+        ),
         elevation: 4,
       ),
       body: Padding(
