@@ -1,4 +1,5 @@
 import 'package:ayolapor/buatlaporan.dart';
+import 'package:ayolapor/detaillaporan.dart';
 import 'package:flutter/material.dart';
 
 class ReportPage extends StatelessWidget {
@@ -38,19 +39,19 @@ class ReportPage extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8),
-            buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                 'Menunggu Tindak Lanjut Kemahasiswaan'),
-            buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                 'Menunggu Tindak Lanjut Dosen Wali'),
-            buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                 'Sudah Ditindak Lanjut Dosen Wali'),
-            buildOption(
+            buildOption(context,
                 'Lord Tangguh', Icons.more_vert, '20 Mei 2023', 'Save Draft'),
-            buildOption(
+            buildOption(context,
                 'Lord Tangguh', Icons.more_vert, '20 Mei 2023', 'Selesai'),
-            buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                 'Laporan Dibatalkan'),
-            buildOption('Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                 'Menunggu Tindak Lanjut Kemahasiswaan'),
             SizedBox(height: 8),
           ],
@@ -59,7 +60,7 @@ class ReportPage extends StatelessWidget {
     );
   }
 
-  Widget buildOption(String text, IconData icon, String date, String status) {
+  Widget buildOption(BuildContext context,String text, IconData icon, String date, String status) {
     Color statusColor = Colors.red;
     if (status == 'Selesai' || status == 'Sudah Ditindak Lanjut Dosen Wali') {
       statusColor = Colors.green;
@@ -81,6 +82,7 @@ class ReportPage extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(date, style: TextStyle(fontWeight: FontWeight.w100)),
+            SizedBox(height: 10,),
             Container(
               padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
               decoration: BoxDecoration(
@@ -102,10 +104,63 @@ class ReportPage extends StatelessWidget {
             ),
           ],
         ),
-        trailing: Icon(icon, color: Colors.red, size: 24),
+        trailing:GestureDetector(
+          child:  Icon(icon, color: Colors.red, size: 24,),
+          onTap: () => {
+            _showOptions(context,)
+          },
+        ),
       ),
     );
   }
+
+void _showOptions(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          child: Wrap(
+            children:[
+              ListTile(
+                leading: Icon(Icons.search),
+                title: Text('Detail'),
+                onTap: () {
+                  // Handle delete option
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DetailLaporan("Detail")),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.edit),
+                title: Text('Edit'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => DetailLaporan("Edit")),
+                  );
+                },
+                
+              ),
+              ListTile(
+                leading: Icon(Icons.close),
+                title: Text('Delete'),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+                
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
 }
+
 
 
