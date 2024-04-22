@@ -31,15 +31,14 @@ class BeritaPageKms extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Navigasi ke halaman TambahBeritaPage saat tombol ditekan
+          // Navigate to TambahBeritaPage when the button is pressed
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => TambahBeritaPage()),
           );
         },
         child: Icon(Icons.add),
-        backgroundColor:
-            Colors.red, // Atur warna latar belakang tombol menjadi merah
+        backgroundColor: Colors.red,
       ),
       body: ListView.builder(
         itemCount: 3,
@@ -52,7 +51,12 @@ class BeritaPageKms extends StatelessWidget {
                 children: [
                   Container(
                     height: 150,
-                    color: Colors.grey[300],
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('berita.jpg'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(10),

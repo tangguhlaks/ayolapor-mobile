@@ -43,7 +43,12 @@ class BeritaPage extends StatelessWidget {
                 children: [
                   Container(
                     height: 150,
-                    color: Colors.grey[300],
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('berita.jpg'),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: EdgeInsets.all(10),
