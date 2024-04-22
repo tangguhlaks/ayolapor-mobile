@@ -1,6 +1,15 @@
 import 'package:flutter/material.dart';
+import 'buatlaporan.dart'; // Import file BuatLaporanPage
 
 class HomePage extends StatelessWidget {
+  // Fungsi untuk navigasi ke halaman BuatLaporanPage
+  void _navigateToBuatLaporan(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BuatLaporan()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,22 +51,35 @@ class HomePage extends StatelessWidget {
           Positioned(
             top: 20,
             right: 20,
-            child: Row(
-              children: [
-                Icon(
-                  Icons.account_circle,
-                  color: Colors.black,
-                  size: 40,
-                ),
-                SizedBox(width: 10), // Spasi antara ikon dan teks
-                Text(
-                  'Tangguh Laksana',
-                  style: TextStyle(
+            child: GestureDetector(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return AlertDialog(
+                      title: Text('Tangguh Laksana'),
+                      actions: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Text('Tutup'),
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.account_circle,
                     color: Colors.black,
-                    fontSize: 16,
+                    size: 40,
                   ),
-                ),
-              ],
+                  SizedBox(width: 10), // Spasi antara ikon dan teks
+                ],
+              ),
             ),
           ),
           Center(
@@ -66,6 +88,39 @@ class HomePage extends StatelessWidget {
               height: 300, // Tinggi diagram
               child: CustomPaint(
                 painter: MyChartPainter(),
+              ),
+            ),
+          ),
+          Positioned(
+            top: 130, // Atur posisi tombol di atas diagram
+            left: 30,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                // Tambahkan logika ketika tombol "Riwayat" ditekan
+              },
+              icon: Icon(Icons.history), // Icon untuk tombol "Riwayat"
+              label: Text('Riwayat'), // Label untuk tombol "Riwayat"
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 50, vertical: 50), // Atur padding tombol
+                textStyle: TextStyle(fontSize: 16), // Atur ukuran teks tombol
+              ),
+            ),
+          ),
+          Positioned(
+            top: 130, // Atur posisi tombol di atas diagram
+            right: 30,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                _navigateToBuatLaporan(
+                    context); // Navigasi ke halaman Buat Laporan
+              },
+              icon: Icon(Icons.add_circle), // Icon untuk tombol "Tambah Lapor"
+              label: Text('Tambah Lapor'), // Label untuk tombol "Tambah Lapor"
+              style: ElevatedButton.styleFrom(
+                padding: EdgeInsets.symmetric(
+                    horizontal: 20, vertical: 50), // Atur padding tombol
+                textStyle: TextStyle(fontSize: 16), // Atur ukuran teks tombol
               ),
             ),
           ),
@@ -136,14 +191,26 @@ class MyChartPainter extends CustomPainter {
 
     // Sudut yang menunjukkan proporsi dari masing-masing laporan
     final double totalSweepAngle = 2 * 3.14; // 360 derajat
-    final double pelecehanSweepAngle = totalSweepAngle / 2; // Sudut setengah lingkaran
-    final double kekerasanSweepAngle = totalSweepAngle / 2; // Sudut setengah lingkaran
+    final double pelecehanSweepAngle =
+        totalSweepAngle / 2; // Sudut setengah lingkaran
+    final double kekerasanSweepAngle =
+        totalSweepAngle / 2; // Sudut setengah lingkaran
 
     // Gambar bagian laporan pelecehan
-    canvas.drawArc(Rect.fromCircle(center: Offset(center, center), radius: radius), startAngle, pelecehanSweepAngle, true, bluePaint);
+    canvas.drawArc(
+        Rect.fromCircle(center: Offset(center, center), radius: radius),
+        startAngle,
+        pelecehanSweepAngle,
+        true,
+        bluePaint);
 
     // Gambar bagian laporan kekerasan
-    canvas.drawArc(Rect.fromCircle(center: Offset(center, center), radius: radius), startAngle + pelecehanSweepAngle, kekerasanSweepAngle, true, redPaint);
+    canvas.drawArc(
+        Rect.fromCircle(center: Offset(center, center), radius: radius),
+        startAngle + pelecehanSweepAngle,
+        kekerasanSweepAngle,
+        true,
+        redPaint);
   }
 
   @override
