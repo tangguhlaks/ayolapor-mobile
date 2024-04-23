@@ -306,58 +306,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          // Positioned(
-          //   top: 130, // Atur posisi tombol di atas diagram
-          //   left: 30,
-          //   child: ElevatedButton.icon(
-          //     onPressed: () {
-          //       _navigateToReportPage(
-          //           context); // Navigasi ke halaman ReportPage
-          //     },
-          //     icon: Icon(Icons.history,
-          //         color: Colors.black87), // Icon untuk tombol "Riwayat"
-          //     label: Text(
-          //       'Riwayat',
-          //       style: TextStyle(
-          //         color: Colors.black87,
-          //         fontSize: 16,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //     style: ElevatedButton.styleFrom(
-          //       padding: EdgeInsets.symmetric(
-          //           horizontal: 50, vertical: 50), // Atur padding tombol
-          //       textStyle: TextStyle(
-          //         fontSize: 16,
-          //       ), // Atur ukuran teks tombol
-          //     ),
-          //   ),
-          // ),
-          // Positioned(
-          //   top: 130, // Atur posisi tombol di atas diagram
-          //   right: 30,
-          //   child: ElevatedButton.icon(
-          //     onPressed: () {
-          //       _navigateToBuatLaporan(
-          //           context); // Navigasi ke halaman Buat Laporan
-          //     },
-          //     icon: Icon(Icons.add_circle,
-          //         color: Colors.black87), // Icon untuk tombol "Tambah Lapor"
-          //     label: Text(
-          //       'Tambah Lapor',
-          //       style: TextStyle(
-          //         color: Colors.black87,
-          //         fontSize: 16,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //     style: ElevatedButton.styleFrom(
-          //       padding: EdgeInsets.symmetric(
-          //           horizontal: 20, vertical: 50), // Atur padding tombol
-          //       textStyle: TextStyle(fontSize: 16), // Atur ukuran teks tombol
-          //     ),
-          //   ),
-          // ),
           Positioned(
             bottom: 20,
             left: 20,
@@ -488,58 +436,6 @@ class HomePage extends StatelessWidget {
               ),
             ),
           ),
-          // Positioned(
-          //   top: 130, // Atur posisi tombol di atas diagram
-          //   left: 30,
-          //   child: ElevatedButton.icon(
-          //     onPressed: () {
-          //       _navigateToReportPage(
-          //           context); // Navigasi ke halaman ReportPage
-          //     },
-          //     icon: Icon(Icons.history,
-          //         color: Colors.black87), // Icon untuk tombol "Riwayat"
-          //     label: Text(
-          //       'Riwayat',
-          //       style: TextStyle(
-          //         color: Colors.black87,
-          //         fontSize: 16,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //     style: ElevatedButton.styleFrom(
-          //       padding: EdgeInsets.symmetric(
-          //           horizontal: 50, vertical: 50), // Atur padding tombol
-          //       textStyle: TextStyle(
-          //         fontSize: 16,
-          //       ), // Atur ukuran teks tombol
-          //     ),
-          //   ),
-          // ),
-          // Positioned(
-          //   top: 130, // Atur posisi tombol di atas diagram
-          //   right: 30,
-          //   child: ElevatedButton.icon(
-          //     onPressed: () {
-          //       _navigateToBuatLaporan(
-          //           context); // Navigasi ke halaman Buat Laporan
-          //     },
-          //     icon: Icon(Icons.add_circle,
-          //         color: Colors.black87), // Icon untuk tombol "Tambah Lapor"
-          //     label: Text(
-          //       'Tambah Lapor',
-          //       style: TextStyle(
-          //         color: Colors.black87,
-          //         fontSize: 16,
-          //         fontWeight: FontWeight.bold,
-          //       ),
-          //     ),
-          //     style: ElevatedButton.styleFrom(
-          //       padding: EdgeInsets.symmetric(
-          //           horizontal: 20, vertical: 50), // Atur padding tombol
-          //       textStyle: TextStyle(fontSize: 16), // Atur ukuran teks tombol
-          //     ),
-          //   ),
-          // ),
           Positioned(
             bottom: 20,
             left: 20,

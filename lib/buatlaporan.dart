@@ -84,16 +84,6 @@ class _BuatLaporanState extends State<BuatLaporan>
             Navigator.pop(context); // Kembali ke tampilan sebelumnya
           },
         ),
-        actions: <Widget>[
-          IconButton(
-            icon: const Icon(
-              Icons.announcement,
-              color: Colors.red,
-              size: 24,
-            ),
-            onPressed: () {},
-          )
-        ],
         elevation: 4,
       ),
       body: SingleChildScrollView(
@@ -106,11 +96,10 @@ class _BuatLaporanState extends State<BuatLaporan>
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             DropdownButtonFormField<String>(
-              iconEnabledColor: Colors.red,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4),
-                  borderSide: BorderSide(width: 3, color: Colors.red),
+                  borderSide: BorderSide(width: 1),
                 ),
               ),
               value: selectedItem,
@@ -121,7 +110,6 @@ class _BuatLaporanState extends State<BuatLaporan>
                           item,
                           style: TextStyle(
                             fontSize: 20,
-                            color: Colors.red,
                           ),
                         ),
                       ))
@@ -167,130 +155,202 @@ class _BuatLaporanState extends State<BuatLaporan>
                 ),
               ),
             ),
-            if (_platformFile != null)
-              Container(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Selected File',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    const SizedBox(height: 10),
-                    Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Colors.white,
-                        boxShadow: const [
-                          BoxShadow(
-                            offset: Offset(0, 1),
-                            blurRadius: 3,
-                            spreadRadius: 2,
-                          )
-                        ],
-                      ),
-                      child: Row(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.file(_file!, width: 70),
-                          ),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  _platformFile!.name,
-                                  style: const TextStyle(
-                                      fontSize: 13, color: Colors.black),
-                                ),
-                                const SizedBox(height: 5),
-                                Text(
-                                  '${(_platformFile!.size / 1024).ceil()} KB',
-                                  style: const TextStyle(
-                                    fontSize: 13,
-                                  ),
-                                ),
-                                const SizedBox(height: 5),
-                                Container(
-                                  height: 5,
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: const BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    color: Colors.red,
-                                  ),
-                                  child: LinearProgressIndicator(
-                                    value: loadingController.value,
-                                    backgroundColor: Colors.red.shade50,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 10),
-                        ],
-                      ),
-                    ),
-                  ],
+            const SizedBox(height: 16),
+            Text(
+              'File Yang Terpilih',
+              style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey),
+            ),
+            const SizedBox(height: 4),
+            Container(
+              height: 75,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(
+                  // Warna border
+                  width: 1, // Lebar border
                 ),
               ),
-            const SizedBox(height: 150),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(right: 10), // Padding kanan
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10), // Radius gambar
+                      child: Image.asset(
+                        'berita.jpg',
+                        width: 50, // Lebar gambar
+                        height: 50, // Tinggi gambar
+                        fit: BoxFit.cover, // Menyesuaikan ukuran gambar
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10), // Jarak antara gambar dan teks
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Screen Shot.JPG',
+                        style: TextStyle(
+                          color: Colors.black, // Warna teks
+                          fontSize: 14, // Ukuran teks
+                          fontWeight: FontWeight
+                              .bold, // Ketebalan teks (jika diperlukan)
+                        ),
+                      ),
+                      Text(
+                        '587 KB',
+                        style: TextStyle(
+                          color: Colors.grey, // Warna teks
+                          fontSize: 12, // Ukuran teks
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // if (_platformFile != null)
+            //   Container(
+            //     padding: const EdgeInsets.all(20),
+            //     child: Column(
+            //       crossAxisAlignment: CrossAxisAlignment.start,
+            //       children: [
+            //         const Text(
+            //           'Selected File',
+            //           style: TextStyle(fontSize: 15),
+            //         ),
+            //         const SizedBox(height: 10),
+            //         Container(
+            //           padding: const EdgeInsets.all(8),
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(10),
+            //             color: Colors.white,
+            //             boxShadow: const [
+            //               BoxShadow(
+            //                 offset: Offset(0, 1),
+            //                 blurRadius: 3,
+            //                 spreadRadius: 2,
+            //               )
+            //             ],
+            //           ),
+            //           child: Row(
+            //             children: [
+            //               ClipRRect(
+            //                 borderRadius: BorderRadius.circular(8),
+            //                 child: Image.file(_file!, width: 70),
+            //               ),
+            //               const SizedBox(width: 10),
+            //               Expanded(
+            //                 child: Column(
+            //                   crossAxisAlignment: CrossAxisAlignment.start,
+            //                   children: [
+            //                     Text(
+            //                       _platformFile!.name,
+            //                       style: const TextStyle(
+            //                           fontSize: 13, color: Colors.black),
+            //                     ),
+            //                     const SizedBox(height: 5),
+            //                     Text(
+            //                       '${(_platformFile!.size / 1024).ceil()} KB',
+            //                       style: const TextStyle(
+            //                         fontSize: 13,
+            //                       ),
+            //                     ),
+            //                     const SizedBox(height: 5),
+            //                     Container(
+            //                       height: 5,
+            //                       clipBehavior: Clip.hardEdge,
+            //                       decoration: const BoxDecoration(
+            //                         borderRadius:
+            //                             BorderRadius.all(Radius.circular(5)),
+            //                         color: Colors.red,
+            //                       ),
+            //                       child: LinearProgressIndicator(
+            //                         value: loadingController.value,
+            //                         backgroundColor: Colors.red.shade50,
+            //                       ),
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //               const SizedBox(width: 10),
+            //             ],
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            const SizedBox(height: 16),
             Text(
               'Keterangan:',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             TextField(
               decoration: InputDecoration(
-                border: OutlineInputBorder(),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(4),
+                ),
                 hintText: 'Tulis Keterangan Kamu',
-                contentPadding: EdgeInsets.symmetric(vertical: 20.0),
+                contentPadding:
+                    EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
               ),
               minLines: 5, // Jumlah minimal baris
               maxLines:
                   null, // Atur ke null agar bisa menambahkan lebih dari 5 baris
             ),
             const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Data disimpan sebagai draft'),
-                    backgroundColor: Colors.red,
+            Column(
+              children: [
+                SizedBox(height: 20),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50, // Mengatur tinggi tombol
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Draft disimpan'),
+                        ),
+                      );
+                    },
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.grey),
+                    ),
+                    child: Text(
+                      'Save as Draft',
+                      style: TextStyle(color: Colors.white),
+                    ),
                   ),
-                );
-              },
-              child: Text(
-                'Save As Draft',
-                style: TextStyle(color: Colors.red),
-              ),
-              style: ButtonStyle(
-                minimumSize: MaterialStateProperty.all<Size>(Size(541, 41)),
-              ),
-            ),
-            const SizedBox(height: 16),
-            ElevatedButton(
-              onPressed: () {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Data berhasil disimpan dan dilaporkan'),
-                    backgroundColor: Colors.red,
-                  ),
-                );
-              },
-              child: Text(
-                'Simpan & Laporkan',
-                style: TextStyle(color: Colors.white),
-              ),
-              style: ButtonStyle(
-                minimumSize: MaterialStateProperty.all<Size>(Size(541, 41)),
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  Colors.red,
                 ),
-              ),
+                SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50, // Mengatur tinggi tombol
+                  child: ElevatedButton(
+                    onPressed: () {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Data disimpan dan dilaporkan'),
+                        ),
+                      );
+                    },
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red),
+                    ),
+                    child: Text(
+                      'Simpan & Laporkan',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ],
         ),
