@@ -1,4 +1,5 @@
 import 'package:ayolapor/bugreportpage.dart';
+import 'package:ayolapor/home.dart';
 import 'package:ayolapor/faqpage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -36,6 +37,19 @@ class SettingPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.red,
+            size: 24,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            ); // Menggunakan Navigator.pushNamed
+          },
+        ),
         elevation: 4,
         automaticallyImplyLeading: false, // Menghilangkan tombol back
       ),
