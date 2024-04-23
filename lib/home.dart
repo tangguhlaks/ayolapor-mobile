@@ -2,6 +2,7 @@ import 'package:ayolapor/beritapage.dart';
 import 'package:ayolapor/homepage.dart';
 import 'package:ayolapor/reportpage.dart';
 import 'package:ayolapor/reportpagedosenwali.dart';
+import 'package:ayolapor/reportpagekemahasiswaan.dart';
 import 'package:ayolapor/settingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -9,6 +10,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'reportpage.dart'; // Import the HomePage widget from homepage.dart
 import 'reportpagedosenwali.dart'; // Import the HomePage widget from homepage.dart
+import 'reportpagekemahasiswaan.dart'; // Import the HomePage widget from homepage.dart
 import 'beritapagekms.dart'; // Import the HomePage widget from homepage.dart
 import 'main.dart'; // Import the HomePage widget from homepage.dart
 
@@ -62,7 +64,8 @@ static List<Widget> _widgetOptions(String role) {
   switch (role) {
     case 'Dosen Wali':
       return <Widget>[
-        Text('Home'),
+        //Text('Home'),
+        HomePage(),
         ReportPageDosenWali(),
         BeritaPage(),
         SettingPage(),
@@ -70,7 +73,7 @@ static List<Widget> _widgetOptions(String role) {
     case 'Kemahasiswaan':
       return <Widget>[
         HomePage(),
-        Text('Tinjau Laporan'),
+        ReportPageKemahasiswaan(),
         BeritaPageKms(),
         SettingPage(),
       ];

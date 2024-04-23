@@ -1,12 +1,7 @@
-import 'package:ayolapor/detaillaporandosenwali.dart';
+import 'package:ayolapor/detaillaporankemahasiswaan.dart';
 import 'package:flutter/material.dart';
 
-class ReportPageDosenWali extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => ReportPageDosenWaliState();
-}
-
-class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
+class ReportPageKemahasiswaan extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,7 +106,7 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DetailLaporanDosenWali("Detail")),
+                    MaterialPageRoute(builder: (context) => DetailLaporanKemahasiswan("Detail")),
                   );
                 },
               ),
@@ -121,4 +116,7 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
       },
     );
   }
+
 }
+
+
