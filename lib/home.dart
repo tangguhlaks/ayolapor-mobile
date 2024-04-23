@@ -1,17 +1,20 @@
 import 'package:ayolapor/beritapage.dart';
 import 'package:ayolapor/homepage.dart';
 import 'package:ayolapor/reportpage.dart';
+import 'package:ayolapor/reportpagedosenwali.dart';
 import 'package:ayolapor/settingpage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'reportpage.dart'; // Import the HomePage widget from homepage.dart
+import 'reportpagedosenwali.dart'; // Import the HomePage widget from homepage.dart
 import 'beritapagekms.dart'; // Import the HomePage widget from homepage.dart
 import 'main.dart'; // Import the HomePage widget from homepage.dart
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure that plugins are initialized
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure that plugins are initialized
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? username = prefs.getString('username');
   String? role = prefs.getString('role');
@@ -56,31 +59,31 @@ class _HomeState extends State<Home> {
 
   int _selectedIndex = 0;
 
-static List<Widget> _widgetOptions(String role) {
-  switch (role) {
-    case 'Dosen Wali':
-      return <Widget>[
-        ReportPage(),
-        Text('Tinjau Laporan'),
-        BeritaPage(),
-        SettingPage(),
-      ];
-    case 'Kemahasiswaan':
-      return <Widget>[
-        HomePage(),
-        Text('Tinjau Laporan'),
-        BeritaPageKms(),
-        SettingPage(),
-      ];
-    default:
-      return <Widget>[
-        HomePage(),
-        ReportPage(),
-        BeritaPage(),
-        SettingPage(),
-      ];
+  static List<Widget> _widgetOptions(String role) {
+    switch (role) {
+      case 'Dosen Wali':
+        return <Widget>[
+          HomePage(userRole: 'Dosen Wali'),
+          ReportPageDosenWali(),
+          BeritaPage(),
+          SettingPage(),
+        ];
+      case 'Kemahasiswaan':
+        return <Widget>[
+          HomePage(userRole: 'Kemahasiswaan'),
+          Text('Tinjau Laporan'),
+          BeritaPageKms(),
+          SettingPage(),
+        ];
+      default:
+        return <Widget>[
+          HomePage(userRole: 'Mahasiswa'),
+          ReportPage(),
+          BeritaPage(),
+          SettingPage(),
+        ];
+    }
   }
-}
 
   void _onItemTapped(int index) {
     setState(() {
