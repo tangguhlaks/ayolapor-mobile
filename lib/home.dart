@@ -73,7 +73,7 @@ class _HomeState extends State<Home> {
       case 'Kemahasiswaan':
         return <Widget>[
           HomePage(userRole: 'Kemahasiswaan'),
-          Text('Tinjau Laporan'),
+          ReportPageKemahasiswaan(),
           BeritaPageKms(),
           SettingPage(),
         ];
