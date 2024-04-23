@@ -176,8 +176,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.0.8"
-<<<<<<< HEAD
-<<<<<<< HEAD
   intl:
     dependency: transitive
     description:
@@ -186,8 +184,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.17.0"
-=======
->>>>>>> 1a2a8b6b5fda8a4f86451bef75562e3efff3dc9c
   leak_tracker:
     dependency: transitive
     description:
@@ -212,11 +208,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-<<<<<<< HEAD
-=======
->>>>>>> ed163bdeb4095687f454fa5b3f78582dbca27dd5
-=======
->>>>>>> 1a2a8b6b5fda8a4f86451bef75562e3efff3dc9c
   lints:
     dependency: transitive
     description:

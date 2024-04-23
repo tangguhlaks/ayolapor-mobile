@@ -78,24 +78,24 @@ class BeritaPage extends StatelessWidget {
 }
 
 
-class TambahBeritaPage extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(
-          'Tambah Berita',
-          style: TextStyle(
-            color: Colors.red,
-          ),
-        ),
-        backgroundColor: Color.fromARGB(255, 255, 255, 255),
-      ),
-      body: Center(
-        child: Text('Halaman Tambah Berita'),
-      ),
-    );
-  }
-}
+// class TambahBeritaPage extends StatelessWidget {
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text(
+//           'Tambah Berita',
+//           style: TextStyle(
+//             color: Colors.red,
+//           ),
+//         ),
+//         backgroundColor: Color.fromARGB(255, 255, 255, 255),
+//       ),
+//       body: Center(
+//         child: Text('Halaman Tambah Berita'),
+//       ),
+//     );
+//   }
+// }
 
 
