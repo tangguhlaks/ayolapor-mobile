@@ -50,7 +50,7 @@ class BeritaPage extends StatelessWidget {
                       height: 150,
                       decoration: BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('berita.jpg'),
+                          image: AssetImage('assets/berita.jpg'),
                           fit: BoxFit.cover,
                         ),
                       ),

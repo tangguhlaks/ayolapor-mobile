@@ -77,7 +77,7 @@ class NewsForm extends StatelessWidget {
             borderRadius: BorderRadius.circular(8.0),
           ),
           child: Image.asset(
-            'berita.jpg',
+            'assets/berita.jpg',
             fit: BoxFit.cover,
           ),
         ),

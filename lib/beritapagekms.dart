@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'tambahberita.dart'; // Impor file tambahberita.dart
+import 'newspage.dart'; // Impor file news_page.dart
+import 'editberita.dart'; // Impor file editberita.dart
 
 void main() {
   runApp(MyApp());
@@ -60,13 +62,52 @@ class BeritaPageKms extends StatelessWidget {
                   ),
                   Padding(
                     padding: EdgeInsets.all(10),
-                    child: Text(
-                      'Judul Berita ${index + 1}',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Judul Berita ${index + 1}',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                        PopupMenuButton(
+                          itemBuilder: (context) => [
+                            PopupMenuItem(
+                              value: 'detail',
+                              child: Text('Detail'),
+                            ),
+                            PopupMenuItem(
+                              value: 'edit',
+                              child: Text('Edit'),
+                            ),
+                            PopupMenuItem(
+                              value: 'delete',
+                              child: Text('Delete'),
+                            ),
+                          ],
+                          onSelected: (value) {
+                            if (value == 'detail') {
+                              // Navigasi ke halaman NewsPage
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => NewsPage()), // Ganti dengan nama halaman NewsPage Anda
+                              );
+                            } else if (value == 'edit') {
+                              // Navigasi ke halaman EditBerita
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => EditBerita()), // Ganti dengan nama halaman EditBerita Anda
+                              );
+                            } else if (value == 'delete') {
+                              // Implement delete action
+                            }
+                          },
+                        ),
+                      ],
                     ),
                   ),
                 ],
