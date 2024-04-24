@@ -68,54 +68,80 @@ class _ReportPageState extends State<ReportPage> {
       });
     }
   }
+@override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      title: const Text(
+        'Tambah Laporan',
+        style: TextStyle(
+          color: Colors.red,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+      centerTitle: true,
+      leading: IconButton(
+        icon: const Icon(
+          Icons.keyboard_arrow_left,
+          color: Colors.red,
+          size: 24,
+        ),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => Home()),
+          );
+        },
+      ),
+      elevation: 4,
+    ),
+    body: Column(
+      children: [
+        Padding(padding: const EdgeInsets.all(16.0),
+        child:SizedBox(
+          width: double.infinity,
+          height: 50, // Mengatur tinggi tombol
+          child: ElevatedButton(
+            onPressed: ()=>{
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => BuatLaporan()),
+              )
+            },
+            style: ButtonStyle(
+                backgroundColor:
+                    MaterialStateProperty.all<Color>(Colors.red)),
+            child: Text(
+              'Tambah Laporan',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ),
+        ),
+        SizedBox(height: 2),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView.builder(
+              controller: _scrollController,
+              itemCount: _reportData.length + (_isLoading ? 1 : 0),
+              itemBuilder: (BuildContext context, int index) {
+                if (index == _reportData.length) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return buildOption(context, _reportData[index]);
+                }
+              },
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Tambah Laporan',
-          style: TextStyle(
-            color: Colors.red,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        centerTitle: true,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.keyboard_arrow_left,
-            color: Colors.red,
-            size: 24,
-          ),
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            );
-          },
-        ),
-        elevation: 4,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView.builder(
-          controller: _scrollController,
-          itemCount: _reportData.length + (_isLoading ? 1 : 0), // Ubah jumlah item
-          itemBuilder: (BuildContext context, int index) {
-            if (index == _reportData.length) {
-              // Indikator loading
-              return Center(
-                child: CircularProgressIndicator(),
-              );
-            } else {
-              // Tampilkan data laporan
-              return buildOption(context, _reportData[index]);
-            }
-          },
-        ),
-      ),
-    );
-  }
 
   Widget buildOption(BuildContext context, String data) {
     // Pisahkan data menjadi komponen yang sesuai
