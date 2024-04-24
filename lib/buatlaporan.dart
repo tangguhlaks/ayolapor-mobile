@@ -180,7 +180,7 @@ class _BuatLaporanState extends State<BuatLaporan>
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10), // Radius gambar
                       child: Image.asset(
-                        'berita.jpg',
+                        'assets/berita.jpg',
                         width: 50, // Lebar gambar
                         height: 50, // Tinggi gambar
                         fit: BoxFit.cover, // Menyesuaikan ukuran gambar
