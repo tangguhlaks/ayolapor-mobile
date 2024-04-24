@@ -15,7 +15,8 @@ import 'beritapagekms.dart'; // Import the HomePage widget from homepage.dart
 import 'main.dart'; // Import the HomePage widget from homepage.dart
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure that plugins are initialized
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure that plugins are initialized
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? username = prefs.getString('username');
   String? role = prefs.getString('role');
@@ -60,32 +61,31 @@ class _HomeState extends State<Home> {
 
   int _selectedIndex = 0;
 
-static List<Widget> _widgetOptions(String role) {
-  switch (role) {
-    case 'Dosen Wali':
-      return <Widget>[
-        //Text('Home'),
-        HomePage(),
-        ReportPageDosenWali(),
-        BeritaPage(),
-        SettingPage(),
-      ];
-    case 'Kemahasiswaan':
-      return <Widget>[
-        HomePage(),
-        ReportPageKemahasiswaan(),
-        BeritaPageKms(),
-        SettingPage(),
-      ];
-    default:
-      return <Widget>[
-        HomePage(),
-        ReportPage(),
-        BeritaPage(),
-        SettingPage(),
-      ];
+  static List<Widget> _widgetOptions(String role) {
+    switch (role) {
+      case 'Dosen Wali':
+        return <Widget>[
+          HomePage(userRole: 'Dosen Wali'),
+          ReportPageDosenWali(),
+          BeritaPage(),
+          SettingPage(),
+        ];
+      case 'Kemahasiswaan':
+        return <Widget>[
+          HomePage(userRole: 'Kemahasiswaan'),
+          ReportPageKemahasiswaan(),
+          BeritaPageKms(),
+          SettingPage(),
+        ];
+      default:
+        return <Widget>[
+          HomePage(userRole: 'Mahasiswa'),
+          ReportPage(),
+          BeritaPage(),
+          SettingPage(),
+        ];
+    }
   }
-}
 
   void _onItemTapped(int index) {
     setState(() {

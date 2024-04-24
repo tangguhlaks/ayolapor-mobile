@@ -164,7 +164,8 @@ class _LoginFormState extends State<LoginForm> {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized(); // Ensure that plugins are initialized
+  WidgetsFlutterBinding
+      .ensureInitialized(); // Ensure that plugins are initialized
   SharedPreferences prefs = await SharedPreferences.getInstance();
   String? username = prefs.getString('username');
   String? role = prefs.getString('role');

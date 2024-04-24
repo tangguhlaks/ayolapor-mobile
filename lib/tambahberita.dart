@@ -70,8 +70,15 @@ class _TambahBeritaFormState extends State<TambahBeritaForm> {
     // Lakukan sesuatu dengan data yang di-input
     // Misalnya, menampilkan nilai judul dan isi dalam pesan Snackbar
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Judul: $judul, Isi: $isi')),
-    );
+    SnackBar(
+      content: Text(
+        'Berita Berhasil Dibuat',
+        style: TextStyle(color: Colors.white), // Mengatur warna teks menjadi putih
+      ),
+      backgroundColor: Colors.green, // Mengatur warna latar belakang menjadi merah
+    ),
+  );
+
 
     // Setelah submit, kosongkan field input
     _judulController.clear();
