@@ -6,5 +6,5 @@ class GlobalsConfig {
   GlobalsConfig._();
 
   // Contoh variabel global
- static String url_api = "http://127.0.0.1:8000/api/";
+ static String url_api = "https://ayolapor-api.evolve-innovation.com/api/";
 }

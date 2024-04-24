@@ -1,9 +1,74 @@
+import 'package:flutter/material.dart';
 import 'package:ayolapor/buatlaporan.dart';
 import 'package:ayolapor/home.dart';
 import 'package:ayolapor/detaillaporan.dart';
-import 'package:flutter/material.dart';
 
-class ReportPage extends StatelessWidget {
+class ReportPage extends StatefulWidget {
+  @override
+  _ReportPageState createState() => _ReportPageState();
+}
+
+class _ReportPageState extends State<ReportPage> {
+  ScrollController _scrollController = ScrollController();
+  bool _isLoading = false;
+  int _page = 1; // Nomor halaman
+
+  List<String> _reportData = [
+    // Data laporan Anda
+    'Lord Tangguh - 20 Mei 2023 - Menunggu Tindak Lanjut Kemahasiswaan',
+    'Lord Tangguh - 20 Mei 2023 - Menunggu Tindak Lanjut Dosen Wali',
+    'Lord Tangguh - 20 Mei 2023 - Sudah Ditindak Lanjut Dosen Wali',
+    'Lord Tangguh - 20 Mei 2023 - Save Draft',
+    'Lord Tangguh - 20 Mei 2023 - Selesai',
+    'Lord Tangguh - 20 Mei 2023 - Laporan Dibatalkan',
+    'Lord Tangguh - 20 Mei 2023 - Menunggu Tindak Lanjut Kemahasiswaan',
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      _fetchData();
+    }
+  }
+
+  Future<void> _fetchData() async {
+    if (!_isLoading) {
+      setState(() {
+        _isLoading = true;
+      });
+
+      // Simulasi penambahan data dengan delay 2 detik
+      await Future.delayed(Duration(seconds: 2));
+
+      setState(() {
+        _isLoading = false;
+        _page++; // Tambah halaman
+        // Tambah data laporan baru ke dalam _reportData
+        _reportData.addAll([
+            'Lord Tangguh - 20 Mei 2023 - Sudah Ditindak Lanjut Dosen Wali',
+            'Lord Tangguh - 20 Mei 2023 - Save Draft',
+            'Lord Tangguh - 20 Mei 2023 - Selesai',
+            'Lord Tangguh - 20 Mei 2023 - Laporan Dibatalkan',
+            'Lord Tangguh - 20 Mei 2023 - Menunggu Tindak Lanjut Kemahasiswaan',
+            'Lord Tangguh - 20 Mei 2023 - Laporan Dibatalkan',
+            'Lord Tangguh - 20 Mei 2023 - Menunggu Tindak Lanjut Kemahasiswaan',
+        ]);
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,55 +91,39 @@ class ReportPage extends StatelessWidget {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Home()),
-            ); // Menggunakan Navigator.pushNamed
+            );
           },
         ),
         elevation: 4,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => BuatLaporan()),
-                );// Implement your button action here
-              },
-              icon: Icon(Icons.add, color: Colors.white),
-              label:
-                  Text('Tambah Laporan', style: TextStyle(color: Colors.white)),
-              style: ButtonStyle(
-                minimumSize: MaterialStateProperty.all<Size>(Size(148, 31)),
-                backgroundColor: MaterialStateProperty.all<Color>(
-                  Colors.red,
-                ),
-              ),
-            ),
-            SizedBox(height: 8),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                'Menunggu Tindak Lanjut Kemahasiswaan'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                'Menunggu Tindak Lanjut Dosen Wali'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                'Sudah Ditindak Lanjut Dosen Wali'),
-            buildOption(context,
-                'Lord Tangguh', Icons.more_vert, '20 Mei 2023', 'Save Draft'),
-            buildOption(context,
-                'Lord Tangguh', Icons.more_vert, '20 Mei 2023', 'Selesai'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                'Laporan Dibatalkan'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                'Menunggu Tindak Lanjut Kemahasiswaan'),
-            SizedBox(height: 8),
-          ],
+        child: ListView.builder(
+          controller: _scrollController,
+          itemCount: _reportData.length + (_isLoading ? 1 : 0), // Ubah jumlah item
+          itemBuilder: (BuildContext context, int index) {
+            if (index == _reportData.length) {
+              // Indikator loading
+              return Center(
+                child: CircularProgressIndicator(),
+              );
+            } else {
+              // Tampilkan data laporan
+              return buildOption(context, _reportData[index]);
+            }
+          },
         ),
       ),
     );
   }
 
-  Widget buildOption(BuildContext context,String text, IconData icon, String date, String status) {
+  Widget buildOption(BuildContext context, String data) {
+    // Pisahkan data menjadi komponen yang sesuai
+    List<String> reportComponents = data.split(' - ');
+    String text = reportComponents[0];
+    String date = reportComponents[1];
+    String status = reportComponents[2];
+
     Color statusColor = Colors.red;
     if (status == 'Selesai' || status == 'Sudah Ditindak Lanjut Dosen Wali') {
       statusColor = Colors.green;
@@ -90,13 +139,12 @@ class ReportPage extends StatelessWidget {
       ),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 16),
-        title: Text(text,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        title: Text(text, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(date, style: TextStyle(fontWeight: FontWeight.w100)),
-            SizedBox(height: 10,),
+            SizedBox(height: 10),
             Container(
               padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
               decoration: BoxDecoration(
@@ -107,7 +155,7 @@ class ReportPage extends StatelessWidget {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 1,
                     blurRadius: 2,
-                    offset: Offset(0, 1), // changes position of shadow
+                    offset: Offset(0, 1),
                   ),
                 ],
               ),
@@ -118,28 +166,28 @@ class ReportPage extends StatelessWidget {
             ),
           ],
         ),
-        trailing:GestureDetector(
-          child:  Icon(icon, color: Colors.red, size: 24,),
-          onTap: () => {
-            _showOptions(context,)
+        trailing: GestureDetector(
+          child: Icon(Icons.more_vert, color: Colors.red, size: 24),
+          onTap: () {
+            _showOptions(context);
           },
         ),
       ),
     );
   }
 
-void _showOptions(BuildContext context) {
+  void _showOptions(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
         return Container(
           child: Wrap(
-            children:[
+            children: [
               ListTile(
                 leading: Icon(Icons.search),
                 title: Text('Detail'),
                 onTap: () {
-                  // Handle delete option
+                  // Handle detail option
                   Navigator.pop(context);
                   Navigator.push(
                     context,
@@ -157,7 +205,6 @@ void _showOptions(BuildContext context) {
                     MaterialPageRoute(builder: (context) => DetailLaporan("Edit")),
                   );
                 },
-                
               ),
               ListTile(
                 leading: Icon(Icons.close),
@@ -165,7 +212,6 @@ void _showOptions(BuildContext context) {
                 onTap: () {
                   Navigator.pop(context);
                 },
-                
               ),
             ],
           ),
@@ -173,8 +219,4 @@ void _showOptions(BuildContext context) {
       },
     );
   }
-
 }
-
-
-

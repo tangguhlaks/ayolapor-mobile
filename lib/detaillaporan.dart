@@ -62,7 +62,7 @@ class DetailLaporan extends StatelessWidget {
           SizedBox(height: 10),
           Text("Bukti",style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(height: 5),
-          Image(image: AssetImage("berita.jpg")),
+          Image(image: AssetImage("assets/berita.jpg")),
           SizedBox(height: 10),
           Text("Keterangan",style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(height: 5),

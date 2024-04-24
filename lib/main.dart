@@ -13,8 +13,7 @@ class LoginScreen extends StatelessWidget {
       body: Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(
-                'background_image.jpg'), // Replace 'background_image.jpg' with your image file path
+            image: AssetImage('assets/background_image.jpg'), // Replace 'background_image.jpg' with your image file path
             fit: BoxFit.cover,
           ),
         ),
@@ -72,7 +71,7 @@ class _LoginFormState extends State<LoginForm> {
             decoration: BoxDecoration(
                 color: Colors.white, borderRadius: BorderRadius.circular(7.0)),
             width: 200,
-            child: Image(image: AssetImage("logo.png")),
+            child: Image(image: AssetImage("assets/logo.png")),
           ),
           SizedBox(height: 50),
           Padding(
