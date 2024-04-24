@@ -54,7 +54,7 @@ class HomePage extends StatelessWidget {
             color: Colors.white, // Mengubah warna latar belakang menjadi putih
           ),
           Positioned(
-            top: 20,
+            top: 40,
             left: 20,
             child: Container(
               padding: EdgeInsets.all(8),
@@ -82,7 +82,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 20,
+            top: 40,
             right: 20,
             child: GestureDetector(
               onTap: () {
@@ -144,7 +144,7 @@ class HomePage extends StatelessWidget {
               ),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 50, vertical: 50), // Atur padding tombol
+                    horizontal: 40, vertical: 40), // Atur padding tombol
                 textStyle: TextStyle(
                   fontSize: 16,
                 ), // Atur ukuran teks tombol
@@ -171,7 +171,7 @@ class HomePage extends StatelessWidget {
               ),
               style: ElevatedButton.styleFrom(
                 padding: EdgeInsets.symmetric(
-                    horizontal: 20, vertical: 50), // Atur padding tombol
+                    horizontal: 10, vertical: 40), // Atur padding tombol
                 textStyle: TextStyle(fontSize: 16), // Atur ukuran teks tombol
               ),
             ),
@@ -236,7 +236,7 @@ class HomePage extends StatelessWidget {
             color: Colors.white, // Mengubah warna latar belakang menjadi putih
           ),
           Positioned(
-            top: 20,
+            top: 40,
             left: 20,
             child: Container(
               padding: EdgeInsets.all(8),
@@ -264,7 +264,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 20,
+            top: 40,
             right: 20,
             child: GestureDetector(
               onTap: () {
@@ -366,7 +366,7 @@ class HomePage extends StatelessWidget {
             color: Colors.white, // Mengubah warna latar belakang menjadi putih
           ),
           Positioned(
-            top: 20,
+            top: 40,
             left: 20,
             child: Container(
               padding: EdgeInsets.all(8),
@@ -394,7 +394,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 20,
+            top: 40,
             right: 20,
             child: GestureDetector(
               onTap: () {

@@ -72,7 +72,16 @@ class BugReportForm extends StatelessWidget {
           // Tombol kirim
           ElevatedButton(
             onPressed: () {
-              // Logika untuk mengirim bug atau saran
+              // Tampilkan pesan snack "Berhasil Terkirim"
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(
+                    'Pesan Anda Berhasil Terkirim!',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  backgroundColor: Colors.green,
+                ),
+              );
             },
             style: ElevatedButton.styleFrom(
               padding: EdgeInsets.symmetric(vertical: 12),

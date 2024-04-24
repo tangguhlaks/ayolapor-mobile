@@ -1,5 +1,5 @@
-import 'package:ayolapor/newspage.dart';
 import 'package:flutter/material.dart';
+import 'package:ayolapor/newspage.dart';
 
 void main() {
   runApp(MyApp());
@@ -9,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: BeritaPage()
+      home: BeritaPage(),
     );
   }
 }
@@ -28,6 +28,16 @@ class BeritaPage extends StatelessWidget {
         ),
         centerTitle: true,
         elevation: 4,
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.red,
+            size: 24,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: ListView.builder(
         itemCount: 3,
@@ -36,11 +46,10 @@ class BeritaPage extends StatelessWidget {
             padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
             child: InkWell(
               onTap: () {
-                // Navigasi ke halaman NewsPage
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => NewsPage()),
-                  );
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => NewsPage()),
+                );
               },
               child: Card(
                 child: Column(
@@ -76,26 +85,3 @@ class BeritaPage extends StatelessWidget {
     );
   }
 }
-
-
-// class TambahBeritaPage extends StatelessWidget {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text(
-//           'Tambah Berita',
-//           style: TextStyle(
-//             color: Colors.red,
-//           ),
-//         ),
-//         backgroundColor: Color.fromARGB(255, 255, 255, 255),
-//       ),
-//       body: Center(
-//         child: Text('Halaman Tambah Berita'),
-//       ),
-//     );
-//   }
-// }
-
-

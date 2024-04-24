@@ -15,6 +15,16 @@ class ReportPageKemahasiswaan extends StatelessWidget {
         ),
         centerTitle: true,
         elevation: 4,
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.red,
+            size: 24,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
