@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ayolapor/newspage.dart';
+import 'package:ayolapor/home.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -27,17 +29,21 @@ class BeritaPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        elevation: 4,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.keyboard_arrow_left,
             color: Colors.red,
             size: 24,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            ); // Menggunakan Navigator.pushNamed
           },
         ),
+        elevation: 4,
+        automaticallyImplyLeading: false,
       ),
       body: ListView.builder(
         itemCount: 3,

@@ -1,5 +1,6 @@
 import 'package:ayolapor/detaillaporandosenwali.dart';
 import 'package:flutter/material.dart';
+import 'package:ayolapor/home.dart';
 
 class ReportPageDosenWali extends StatefulWidget {
   @override
@@ -19,21 +20,35 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
           ),
         ),
         centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.red,
+            size: 24,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            ); // Menggunakan Navigator.pushNamed
+          },
+        ),
         elevation: 4,
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView(
           children: [
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+            buildOption(context, 'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                 'Menunggu Tindak Lanjut Kemahasiswaan'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+            buildOption(context, 'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                 'Menunggu Tindak Lanjut Dosen Wali'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+            buildOption(context, 'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                 'Sudah Ditindak Lanjut Dosen Wali'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
+            buildOption(context, 'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
                 'Laporan Ditolak'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '21 Mei 2023',
+            buildOption(context, 'Lord Tangguh', Icons.more_vert, '21 Mei 2023',
                 'Selesai'),
             SizedBox(height: 8),
           ],
@@ -42,7 +57,8 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
     );
   }
 
-  Widget buildOption(BuildContext context,String text, IconData icon, String date, String status) {
+  Widget buildOption(BuildContext context, String text, IconData icon,
+      String date, String status) {
     Color statusColor = Colors.red;
     if (status == 'Selesai' || status == 'Sudah Ditindak Lanjut Dosen Wali') {
       statusColor = Colors.green;
@@ -64,7 +80,9 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(date, style: TextStyle(fontWeight: FontWeight.w100)),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
               decoration: BoxDecoration(
@@ -87,10 +105,12 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
           ],
         ),
         trailing: GestureDetector(
-          child:  Icon(icon, color: Colors.red, size: 24,),
-          onTap: () => {
-            _showOptions(context)
-          },
+          child: Icon(
+            icon,
+            color: Colors.red,
+            size: 24,
+          ),
+          onTap: () => {_showOptions(context)},
         ),
       ),
     );
@@ -102,7 +122,7 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
       builder: (BuildContext context) {
         return Container(
           child: Wrap(
-            children:[
+            children: [
               ListTile(
                 leading: Icon(Icons.search),
                 title: Text('Detail'),
@@ -111,7 +131,8 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DetailLaporanDosenWali("Detail")),
+                    MaterialPageRoute(
+                        builder: (context) => DetailLaporanDosenWali("Detail")),
                   );
                 },
               ),

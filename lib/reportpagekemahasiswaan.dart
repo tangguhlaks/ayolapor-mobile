@@ -1,5 +1,7 @@
 import 'package:ayolapor/detaillaporankemahasiswaan.dart';
 import 'package:flutter/material.dart';
+import 'package:ayolapor/home.dart';
+
 
 class ReportPageKemahasiswaan extends StatelessWidget {
   @override
@@ -14,17 +16,21 @@ class ReportPageKemahasiswaan extends StatelessWidget {
           ),
         ),
         centerTitle: true,
-        elevation: 4,
         leading: IconButton(
-          icon: Icon(
+          icon: const Icon(
             Icons.keyboard_arrow_left,
             color: Colors.red,
             size: 24,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            ); // Menggunakan Navigator.pushNamed
           },
         ),
+        elevation: 4,
+        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
