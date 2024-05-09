@@ -113,17 +113,9 @@ class _BeritaPageKmsState extends State<BeritaPageKms> {
                           padding: const EdgeInsets.all(10),
                           child: Row(
                             children: [
-                              Expanded(
-                                child: Text(
-                                  berita[
-                                      'title'], // Assuming 'judul' is the key for the title
-                                  textAlign: TextAlign.center,
-                                  style: const TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ),
+                              SizedBox(
+                                  width:
+                                      8), // Add some spacing between PopupMenuButton and left edge
                               PopupMenuButton(
                                 itemBuilder: (context) => [
                                   const PopupMenuItem(
@@ -145,17 +137,24 @@ class _BeritaPageKmsState extends State<BeritaPageKms> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              NewsPage()), // Replace with your NewsPage name
+                                        builder: (context) =>
+                                            NewsPage(), // Replace with your NewsPage name
+                                      ),
                                     );
                                   } else if (value == 'edit') {
                                     // Navigation to EditBerita
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) =>
-                                              EditBeritaForm(id : berita['id'])), // Replace with your EditBerita name
-                                    );
+                                        builder: (context) =>
+                                            EditBeritaForm(id: berita['id']),
+                                      ),
+                                    ).then((value) {
+                                      // Reload data after returning from the edit page
+                                      setState(() {
+                                        _responseData = fetchData();
+                                      });
+                                    });
                                   } else if (value == 'delete') {
                                     showDialog(
                                       context: context,
@@ -188,6 +187,21 @@ class _BeritaPageKmsState extends State<BeritaPageKms> {
                                   }
                                 },
                               ),
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 8),
+                                  child: Text(
+                                    berita[
+                                        'title'], // Assuming 'judul' is the key for the title
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -214,8 +228,10 @@ class _BeritaPageKmsState extends State<BeritaPageKms> {
             content: Text('Berita deleted successfully'),
           ),
         );
-        // Optionally, you can refresh the list after deletion
-        fetchData();
+        // Reload the page with updated data
+        setState(() {
+          _responseData = fetchData();
+        });
       } else {
         // Handle error, maybe show an error message
         ScaffoldMessenger.of(context).showSnackBar(

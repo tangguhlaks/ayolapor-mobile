@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ayolapor/home.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -18,13 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       // Wrap with MaterialApp
-      home: Scaffold(
-        // or Scaffold
-        appBar: AppBar(
-          title: Text('My App'),
-        ),
-        body: EditBeritaForm(),
-      ),
+      home: EditBeritaForm(),
     );
   }
 }
@@ -80,8 +75,8 @@ class _EditBeritaFormState extends State<EditBeritaForm> {
   void _submitForm() async {
     String judul = _judulController.text;
     String isi = _isiController.text;
-    String imagePath =
-        _imageFile!.path; // Assuming _filePath stores the path of the selected image
+    String imagePath = _imageFile!
+        .path; // Assuming _filePath stores the path of the selected image
 
     // Create a multipart request
     var request = http.MultipartRequest('POST',
@@ -111,9 +106,10 @@ class _EditBeritaFormState extends State<EditBeritaForm> {
       prefs.setString('description', isi);
       prefs.setString('title', judul);
       prefs.setString('image', fileName!);
-    } else {
-      print(responseBody);
-    }
+
+      // Reload the data after editing
+      fetchData();
+    } else {}
 
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
@@ -124,12 +120,11 @@ class _EditBeritaFormState extends State<EditBeritaForm> {
         backgroundColor: Colors.green,
       ),
     );
+
     setState(() {
       _filePath = null;
-      _judulController.clear();
-      _isiController.clear();
     });
-  } 
+  }
 
   void _selectImage() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -146,61 +141,102 @@ class _EditBeritaFormState extends State<EditBeritaForm> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            InkWell(
-              onTap: _selectImage,
-              child: Container(
-                height: 150,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  border: Border.all(color: Colors.grey),
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: _imageFile != null
-                    ? Image.file(
-                        // Use Image.file if _imageFile is not null
-                        _imageFile!,
-                        fit: BoxFit.cover,
-                      )
-                    : _filePath != null
-                        ? Image.network(
-                            // Use Image.network if _imageFile is null and _filePath is not null
-                            _filePath!,
-                            fit: BoxFit.cover,
-                          )
-                        : Icon(
-                            Icons.add_a_photo,
-                            size: 48,
-                            color: Colors.grey,
-                          ),
-              ),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _judulController,
-              decoration: InputDecoration(),
-            ),
-            SizedBox(height: 16.0),
-            TextField(
-              controller: _isiController,
-              maxLines: null,
-              decoration: InputDecoration(),
-            ),
-            SizedBox(height: 16.0),
-            ElevatedButton(
-              onPressed: _submitForm,
-              child:
-                  Text('Simpan Berita', style: TextStyle(color: Colors.white)),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-              ),
-            ),
-          ],
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          'Edit Berita',
+          style: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
+          ),
         ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: const Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.red,
+            size: 24,
+          ),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Home()),
+            ); // Menggunakan Navigator.pushNamed
+          },
+        ),
+        elevation: 4,
+        automaticallyImplyLeading: false, // Menghilangkan tombol back
+      ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          InkWell(
+            onTap: _selectImage,
+            child: Container(
+              height: 150,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: _imageFile != null
+                  ? Image.file(
+                      // Use Image.file if _imageFile is not null
+                      _imageFile!,
+                      fit: BoxFit.cover,
+                    )
+                  : _filePath != null
+                      ? Image.network(
+                          // Use Image.network if _imageFile is null and _filePath is not null
+                          _filePath!,
+                          fit: BoxFit.cover,
+                        )
+                      : Icon(
+                          Icons.add_a_photo,
+                          size: 48,
+                          color: Colors.grey,
+                        ),
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: TextField(
+              controller: _judulController,
+              decoration: InputDecoration(
+                labelText: 'Judul',
+                contentPadding: EdgeInsets.all(8.0),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          SizedBox(height: 16.0),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: TextField(
+              controller: _isiController,
+              decoration: InputDecoration(
+                labelText: 'Judul',
+                contentPadding: EdgeInsets.all(8.0),
+                border: InputBorder.none,
+              ),
+            ),
+          ),
+          SizedBox(height: 16.0),
+          ElevatedButton(
+            onPressed: _submitForm,
+            child: Text('Simpan Berita', style: TextStyle(color: Colors.white)),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+            ),
+          ),
+        ],
       ),
     );
   }

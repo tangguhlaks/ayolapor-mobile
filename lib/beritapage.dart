@@ -1,27 +1,39 @@
-import 'package:flutter/material.dart';
 import 'package:ayolapor/newspage.dart';
-import 'package:ayolapor/home.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+import 'GlobalConfig.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
+class BeritaPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BeritaPage(),
-    );
-  }
+  _BeritaPageState createState() => _BeritaPageState();
 }
 
-class BeritaPage extends StatelessWidget {
+class _BeritaPageState extends State<BeritaPage> {
+  late Future<Map<String, dynamic>> _responseData;
+
+  @override
+  void initState() {
+    super.initState();
+    _responseData = fetchData();
+  }
+
+  Future<Map<String, dynamic>> fetchData() async {
+    var url = Uri.parse(GlobalsConfig.url_api + 'news');
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load data');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Berita',
           style: TextStyle(
             color: Colors.red,
@@ -29,6 +41,7 @@ class BeritaPage extends StatelessWidget {
           ),
         ),
         centerTitle: true,
+        elevation: 4,
         leading: IconButton(
           icon: const Icon(
             Icons.keyboard_arrow_left,
@@ -36,58 +49,76 @@ class BeritaPage extends StatelessWidget {
             size: 24,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            ); // Menggunakan Navigator.pushNamed
+            Navigator.pop(context);
           },
         ),
-        elevation: 4,
-        automaticallyImplyLeading: false,
       ),
-      body: ListView.builder(
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => NewsPage()),
+      body: FutureBuilder<Map<String, dynamic>>(
+        future: _responseData,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}'));
+          } else {
+            List<dynamic> beritaList = snapshot.data?['data'];
+            return ListView.builder(
+              itemCount: beritaList.length,
+              itemBuilder: (context, index) {
+                var berita = beritaList[index];
+                return Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                  child: GestureDetector(
+                    onTap: () =>    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              NewsPage()), // Replace with your NewsPage name
+                                    ),
+                    child: Card(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Container(
+                            height: 150,
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: NetworkImage(
+                                    'https://ayolapor-api.evolve-innovation.com/assets/news/${berita['image']}'), // Assuming 'image' is the key for the image URL
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    berita[
+                                        'title'], // Assuming 'judul' is the key for the title
+                                    textAlign: TextAlign.center,
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
                 );
               },
-              child: Card(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Container(
-                      height: 150,
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/berita.jpg'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(10),
-                      child: Text(
-                        'Judul Berita ${index + 1}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          );
+            );
+          }
         },
       ),
     );
   }
 }
+
