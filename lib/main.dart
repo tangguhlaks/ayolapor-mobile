@@ -43,7 +43,7 @@ class _LoginFormState extends State<LoginForm> {
       'username': username,
       'password': password,
       'role': role,
-    };
+    };    
 
     // Lakukan panggilan API
     var url = Uri.parse(GlobalsConfig.url_api + 'login');

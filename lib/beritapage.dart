@@ -1,6 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ayolapor/newspage.dart';
 import 'package:ayolapor/home.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 void main() {
@@ -16,7 +19,33 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class BeritaPage extends StatelessWidget {
+class BeritaPage extends StatefulWidget {
+  @override
+  State<BeritaPage> createState() => _BeritaPageState();
+}
+
+class _BeritaPageState extends State<BeritaPage> {
+
+  Map<String, dynamic> _futureNews = {};
+
+  @override
+  void initState() {
+    super.initState();
+    fetchNews();
+  }
+
+  void fetchNews() async {
+    final response = await http.get(Uri.parse('https://ayolapor-api.evolve-innovation.com/api/news'));
+    debugPrint('Response: ${response.body}');
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic>? responseData = json.decode(response.body);
+      _futureNews =  responseData ?? {}; // Jika responseData null, kembalikan objek kosong
+      setState(() {});
+    } else {
+      throw Exception('Failed to load news');
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +74,8 @@ class BeritaPage extends StatelessWidget {
         elevation: 4,
         automaticallyImplyLeading: false,
       ),
-      body: ListView.builder(
+      body: _futureNews.isEmpty? Center(child: CupertinoActivityIndicator(),):
+       ListView.builder(
         itemCount: 3,
         itemBuilder: (context, index) {
           return Padding(
@@ -54,7 +84,7 @@ class BeritaPage extends StatelessWidget {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => NewsPage()),
+                  MaterialPageRoute(builder: (context) => NewsPage(judul: _futureNews['data'][index]['title'], gambar: _futureNews['data'][index]['image'], deskripsi: _futureNews['data'][index]['description'])),
                 );
               },
               child: Card(
@@ -73,7 +103,7 @@ class BeritaPage extends StatelessWidget {
                     Padding(
                       padding: EdgeInsets.all(10),
                       child: Text(
-                        'Judul Berita ${index + 1}',
+                        _futureNews['data'][index]['title'],
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 16,
