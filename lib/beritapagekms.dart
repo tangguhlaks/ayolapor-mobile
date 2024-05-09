@@ -134,6 +134,7 @@ class _BeritaPageKmsState extends State<BeritaPageKms> {
                                 onSelected: (value) {
                                   if (value == 'detail') {
                                     // Navigation to NewsPage
+<<<<<<< HEAD
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
@@ -141,6 +142,14 @@ class _BeritaPageKmsState extends State<BeritaPageKms> {
                                             NewsPage(), // Replace with your NewsPage name
                                       ),
                                     );
+=======
+                                    // Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //       builder: (context) =>
+                                    //           NewsPage()), // Replace with your NewsPage name
+                                    // );
+>>>>>>> 3460b8b0023483feb55c5eaf11a543caced2ce9e
                                   } else if (value == 'edit') {
                                     // Navigation to EditBerita
                                     Navigator.push(
