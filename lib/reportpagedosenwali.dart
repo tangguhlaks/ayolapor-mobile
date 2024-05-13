@@ -30,7 +30,7 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => Home()),
-            ); // Menggunakan Navigator.pushNamed
+            );
           },
         ),
         elevation: 4,
@@ -110,7 +110,9 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
             color: Colors.red,
             size: 24,
           ),
-          onTap: () => {_showOptions(context)},
+          onTap: () {
+            _showOptions(context);
+          },
         ),
       ),
     );
@@ -127,12 +129,12 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
                 leading: Icon(Icons.search),
                 title: Text('Detail'),
                 onTap: () {
-                  // Handle delete option
                   Navigator.pop(context);
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => DetailLaporanDosenWali("Detail")),
+                      builder: (context) => DetailLaporanDosenWali(type: "Tinjauan Laporan MHS",),
+                    ),
                   );
                 },
               ),
