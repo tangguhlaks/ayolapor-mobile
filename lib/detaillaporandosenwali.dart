@@ -143,18 +143,39 @@ class DetailLaporanDosenWali extends StatelessWidget {
 
   Future<void> _updateStatus(String newStatus, BuildContext context) async {
     try {
-      var url = Uri.parse('https://ayolapor-api.evolve-innovation.com/api/report');
-      var response = await http.post(
+      var url = Uri.parse('https://ayolapor-api.evolve-innovation.com/api/report/3');
+      var response = await http.put(
         url,
         body: {
-          'status': newStatus,
-          // Mungkin Anda perlu menambahkan lebih banyak data di sini sesuai dengan kebutuhan API
-        },
+            "type": "Bullying",
+            "prove": "1715237496_p-removebg.png",
+            "description": "Tes dari aplikasi",
+            "status": newStatus,
+            "mahasiswa": "1",
+            "dosen_wali": "3"   
+        }
       );
 
       if (response.statusCode == 200) {
         // Berhasil mengirim permintaan, Anda mungkin ingin menangani respons API di sini
         // onStatusChanged(newStatus);
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Berhasil'),
+              content: Text('Berhasil mengirim permintaan ke server.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
       } else {
         // Gagal mengirim permintaan, tangani kesalahan di sini
         showDialog(

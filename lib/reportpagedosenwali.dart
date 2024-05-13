@@ -9,6 +9,14 @@ class ReportPageDosenWali extends StatefulWidget {
 
 class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
   @override
+  // List<String> listReport = [];
+  // int indexBerubah = listReport.indexWhere((element) => element.id == idYangKitaUbah);
+  // Report reportBerubah = listReport[indexBerubah];
+  // reportBerubah.status = statusBaru;
+  // dst
+  // listReport[indexBerubah] = reportBerubah;
+  // setState() {}
+
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
