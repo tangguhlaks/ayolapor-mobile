@@ -125,7 +125,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Positioned(
-            top: 130, // Atur posisi tombol di atas diagram
+            top: 130, // Atur posisi button riwayat
             left: 30,
             child: ElevatedButton.icon(
               onPressed: () {
