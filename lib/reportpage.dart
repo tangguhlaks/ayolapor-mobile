@@ -105,7 +105,7 @@ Widget build(BuildContext context) {
             onPressed: ()=>{
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => BuatLaporan()),
+                MaterialPageRoute(builder: (context) => BuatLaporanPage()),
               )
             },
             style: ButtonStyle(

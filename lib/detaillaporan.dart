@@ -40,6 +40,26 @@ class DetailLaporan extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: 10),
+          Text("Judul Laporan",style: TextStyle(fontWeight: FontWeight.bold)),
+          SizedBox(height: 5),
+          Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: Colors.grey),
+              borderRadius:
+                  BorderRadius.circular(10.0), // Optional: rounded corners
+            ),
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+              horizontal: 15.0), // Padding inside the container
+              child: TextField(
+                decoration: InputDecoration(
+                  labelText: 'Saya dilecehkan di gedung TULT',
+                  border: InputBorder.none, // Optional: remove border
+                ),
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
           Text("Jenis Laporan",style: TextStyle(fontWeight: FontWeight.bold)),
           SizedBox(height: 5),
           Container(
@@ -85,47 +105,6 @@ class DetailLaporan extends StatelessWidget {
               ),
             ),
           ),
-          
-          if(type == "Edit")
-            Column(
-              children: [
-                SizedBox(height: 20), 
-                SizedBox(
-                  width: double.infinity,
-                  height: 50, // Mengatur tinggi tombol
-                  child: ElevatedButton(
-                    onPressed: ()=>{
-
-                    },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.grey)),
-                    child: Text(
-                      'Save as Draft',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 8), 
-                SizedBox(
-                  width: double.infinity,
-                  height: 50, // Mengatur tinggi tombol
-                  child: ElevatedButton(
-                    onPressed: ()=>{
-
-                    },
-                    style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.red)),
-                    child: Text(
-                      'Simpan & Laporkan',
-                      style: TextStyle(color: Colors.white),
-                    ),
-                  ),
-                ),
-              ],
-            )
-
         ],
       ),
     );
