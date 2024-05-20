@@ -1,13 +1,17 @@
-import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
 class DetailLaporanDosenWali extends StatelessWidget {
-  //final Function(String) onStatusChanged;
   final String type;
+  final int reportIndex;
+  final Function(String) onStatusChanged;
 
-  DetailLaporanDosenWali({required this.type,  Key? key}) : super(key: key);
+  DetailLaporanDosenWali({
+    required this.type,
+    required this.reportIndex,
+    required this.onStatusChanged,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +32,7 @@ class DetailLaporanDosenWali extends StatelessWidget {
             size: 24,
           ),
           onPressed: () {
-            Navigator.pop(context); // Kembali ke tampilan sebelumnya
+            Navigator.pop(context);
           },
         ),
         elevation: 4,
@@ -50,16 +54,14 @@ class DetailLaporanDosenWali extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(10.0), // Optional: rounded corners
+                borderRadius: BorderRadius.circular(10.0),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                ), // Padding inside the container
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: TextField(
                   decoration: InputDecoration(
                     labelText: 'Pelecehan',
-                    border: InputBorder.none, // Optional: remove border
+                    border: InputBorder.none,
                   ),
                 ),
               ),
@@ -74,18 +76,16 @@ class DetailLaporanDosenWali extends StatelessWidget {
             Container(
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
-                borderRadius: BorderRadius.circular(10.0), // Optional: rounded corners
+                borderRadius: BorderRadius.circular(10.0),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: 15.0,
-                ), // Padding inside the container
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: TextField(
-                  minLines: 5, // Jumlah minimal baris
+                  minLines: 5,
                   maxLines: null,
                   decoration: InputDecoration(
                     labelText: 'Saya dilecehkan di toilet TULT',
-                    border: InputBorder.none, // Optional: remove border
+                    border: InputBorder.none,
                   ),
                 ),
               ),
@@ -93,7 +93,7 @@ class DetailLaporanDosenWali extends StatelessWidget {
             SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
-              height: 50, // Mengatur tinggi tombol
+              height: 50,
               child: ElevatedButton(
                 onPressed: () => _updateStatus('Tolak Laporan', context),
                 style: ButtonStyle(
@@ -108,7 +108,7 @@ class DetailLaporanDosenWali extends StatelessWidget {
             SizedBox(height: 8),
             SizedBox(
               width: double.infinity,
-              height: 50, // Mengatur tinggi tombol
+              height: 50,
               child: ElevatedButton(
                 onPressed: () => _updateStatus('Tindak Lanjuti', context),
                 style: ButtonStyle(
@@ -123,7 +123,7 @@ class DetailLaporanDosenWali extends StatelessWidget {
             SizedBox(height: 8),
             SizedBox(
               width: double.infinity,
-              height: 50, // Mengatur tinggi tombol
+              height: 50,
               child: ElevatedButton(
                 onPressed: () => _updateStatus('Selesai', context),
                 style: ButtonStyle(
@@ -143,22 +143,22 @@ class DetailLaporanDosenWali extends StatelessWidget {
 
   Future<void> _updateStatus(String newStatus, BuildContext context) async {
     try {
-      var url = Uri.parse('https://ayolapor-api.evolve-innovation.com/api/report/3');
+      var url = Uri.parse('https://ayolapor-api.evolve-innovation.com/api/report/4');
       var response = await http.put(
         url,
         body: {
-            "type": "Bullying",
-            "prove": "1715237496_p-removebg.png",
-            "description": "Tes dari aplikasi",
-            "status": newStatus,
-            "mahasiswa": "1",
-            "dosen_wali": "3"   
-        }
+          "title": "asdf",
+          "type": "Bullying",
+          "prove": "1715237496_p-removebg.png",
+          "description": "Tes dari aplikasi",
+          "status": newStatus,
+          "mahasiswa": "1",
+          "dosen_wali": "3",
+        },
       );
 
       if (response.statusCode == 200) {
-        // Berhasil mengirim permintaan, Anda mungkin ingin menangani respons API di sini
-        // onStatusChanged(newStatus);
+        onStatusChanged(newStatus);
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -177,7 +177,6 @@ class DetailLaporanDosenWali extends StatelessWidget {
           },
         );
       } else {
-        // Gagal mengirim permintaan, tangani kesalahan di sini
         showDialog(
           context: context,
           builder: (BuildContext context) {
@@ -197,7 +196,6 @@ class DetailLaporanDosenWali extends StatelessWidget {
         );
       }
     } catch (e) {
-      // Tangani kesalahan jaringan atau kesalahan lainnya di sini
       showDialog(
         context: context,
         builder: (BuildContext context) {
