@@ -14,7 +14,7 @@ class HomePage extends StatelessWidget {
   void _navigateToBuatLaporan(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => BuatLaporan()),
+      MaterialPageRoute(builder: (context) => BuatLaporanPage()),
     );
   }
 
