@@ -73,7 +73,7 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
   String? _filePath;
 
   // Pilihan untuk dropdown
-  List<String> _pilihan = ['Seksual', 'Bullying'];
+  List<String> _pilihan = ['Seksual', 'Bullying', 'Kekerasan Fisik'];
 
   // Method untuk menghandle submit form
   void _submitForm() async {
@@ -81,7 +81,8 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
     String type = _typeController.text;
     String isi = _isiController.text;
     String imagePath =
-        _filePath!; // Assuming _filePath stores the path of the selected image
+        _filePath!;
+         // Assuming _filePath stores the path of the selected image
 
     // Create a multipart request
     var request = http.MultipartRequest(
@@ -154,7 +155,6 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
-        SizedBox(height: 16.0), // Spasi antara field
         // Input judul
         Container(
           decoration: BoxDecoration(
@@ -167,6 +167,9 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
               labelText: 'Judul',
               contentPadding: EdgeInsets.all(8.0),
               border: InputBorder.none,
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.bold, // Membuat teks label menjadi tebal
+              ),
             ),
           ),
         ),
@@ -195,6 +198,9 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
               labelText: 'Jenis Laporan',
               contentPadding: EdgeInsets.all(8.0),
               border: InputBorder.none,
+              labelStyle: TextStyle(
+                fontWeight: FontWeight.bold, // Membuat teks label menjadi tebal
+              ),
             ),
           ),
         ),
@@ -228,18 +234,29 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
             border: Border.all(color: Colors.grey),
             borderRadius: BorderRadius.circular(8.0),
           ),
-          child: TextField(
-            controller: _isiController,
-            minLines: 5, // Minimal 5 baris
-            maxLines: null, // Maksimum baris tidak terbatas
-            decoration: InputDecoration(
-              border: InputBorder.none,
-              contentPadding: EdgeInsets.fromLTRB(8.0, 10.0, 30.0, 30.0), // Sesuaikan padding atas untuk menghindari tumpang tindih dengan label
-              labelStyle: TextStyle(fontSize: 20), // Atur ukuran label di sini
-              labelText: 'Tuliskan Keterangan', // Hapus label dari input field
-            ),
-            textAlignVertical: TextAlignVertical.top, // Geser teks ke atas
-            keyboardType: TextInputType.multiline, // Aktifkan input multiline
+          child: Stack(
+            children: [
+              TextField(
+                controller: _isiController,
+                minLines: 5, // Minimal 5 baris
+                maxLines: null, // Maksimum baris tidak terbatas
+                decoration: InputDecoration(
+                  border: InputBorder.none,
+                  contentPadding: EdgeInsets.all(8.0), // Sesuaikan padding
+                  labelStyle: TextStyle(
+                    fontSize: 20,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold, // Teks label menjadi tebal
+                  ),
+                  floatingLabelBehavior: FloatingLabelBehavior
+                      .always, // Membuat label selalu di atas
+                  labelText: 'Tuliskan Keterangan',
+                ),
+                textAlignVertical: TextAlignVertical.top, // Geser teks ke atas
+                keyboardType:
+                    TextInputType.multiline, // Aktifkan input multiline
+              ),
+            ],
           ),
         ),
         SizedBox(height: 16.0), // Spasi antara field
