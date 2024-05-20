@@ -1,14 +1,57 @@
 import 'package:ayolapor/detaillaporankemahasiswaan.dart';
 import 'package:flutter/material.dart';
-import 'package:ayolapor/home.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+class ReportPageKemahasiswaan extends StatefulWidget {
+  @override
+  _ReportPageKemahasiswaanState createState() =>
+      _ReportPageKemahasiswaanState();
+}
 
-class ReportPageKemahasiswaan extends StatelessWidget {
+class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
+  List<dynamic> reports = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchReports();
+  }
+
+  Future<void> fetchReports() async {
+    var headers = {
+      'Cookie':
+          'XSRF-TOKEN=eyJpdiI6ImhjekZVVFREM1k3QVkwUCtZUkVpc0E9PSIsInZhbHVlIjoibGJ6VjBDc3BIdVBLSHc4TXZabCtsaTFBOHp3RDYxSzdmZmpYdGtzY3NqVUFDeTdiZ05RbXF5UXI2TDhRdXNsT0dURGZFU3R5dnI0eVRsNTd0K0JIWmVsSTNmNHRNSmRjMUpjVDg3MnFScjFHNEw4T3ZYNzBadGdnZHk2RlUwdTIiLCJtYWMiOiI1ZTIxNGFkZDg0ZjBkYjg0NDI4NWJiZDYwMzhmZTQyYTQwMzZmNWI0MDllODVjOWZmZGViN2RmZTBhY2IzNTM1IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ik1vakRIS2Jxb2dwWmVrL2FYdUQ4c1E9PSIsInZhbHVlIjoiaW8wR2xlMTFaUk8rVnEvZ0tLalJCN2lSd1NVUXZtbFJFeFR3b3p5MjNyYmxmcEJKRy85SVR2Y1AxWUVqWUdoT2s4UE5rM3ZTQjVhTWQrRnlRRy9HWldFQUdvcllwZ1FnanJJdVUvcjljdWkvemdMNE5ieEczOEtXYUMrQ1oyczUiLCJtYWMiOiJmYTA4NzAxYmRiYTBkYmI2NzM4ZmI2MTQwMDBlZTc3MTZkMmUzMzAzNWIyOTM0NGMwY2YyNmVjYjIxYjg4NzEwIiwidGFnIjoiIn0%3D'
+    };
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://ayolapor-api.evolve-innovation.com/api/report-by-status'));
+    request.fields.addAll({
+      'status': 'Need Approve By Kemahasiswaan',
+    });
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> decodedBody = json.decode(responseBody);
+
+      setState(() {
+        reports = decodedBody['data'];
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Report',
           style: TextStyle(
             color: Colors.red,
@@ -17,45 +60,41 @@ class ReportPageKemahasiswaan extends StatelessWidget {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.keyboard_arrow_left,
             color: Colors.red,
             size: 24,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            ); // Menggunakan Navigator.pushNamed
+            Navigator.pop(context);
           },
         ),
         elevation: 4,
-        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                'Menunggu Tindak Lanjut Kemahasiswaan'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                'Menunggu Tindak Lanjut Dosen Wali'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                'Sudah Ditindak Lanjut Dosen Wali'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '20 Mei 2023',
-                'Laporan Ditolak'),
-            buildOption(context,'Lord Tangguh', Icons.more_vert, '21 Mei 2023',
-                'Selesai'),
-            SizedBox(height: 8),
-          ],
+        child: ListView.builder(
+          itemCount: reports.length,
+          itemBuilder: (BuildContext context, int index) {
+            var report = reports[index];
+            return buildOption(
+              context,
+              report['title']+' - '+report['first_name']+' '+report['last_name'],
+              Icons.more_vert,
+              report['created_at'],
+              report['status'],
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget buildOption(BuildContext context,String text, IconData icon, String date, String status) {
+  Widget buildOption(BuildContext context, String text, IconData icon,
+      String date, String status) {
     Color statusColor = Colors.red;
-    if (status == 'Selesai' || status == 'Sudah Ditindak Lanjut Dosen Wali') {
+    if (status == 'Selesai' ||
+        status == 'Sudah Ditindak Lanjut Dosen Wali') {
       statusColor = Colors.green;
     } else if (status == 'Save Draft') {
       statusColor = Colors.yellow;
@@ -75,7 +114,9 @@ class ReportPageKemahasiswaan extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(date, style: TextStyle(fontWeight: FontWeight.w100)),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
               decoration: BoxDecoration(
@@ -98,10 +139,12 @@ class ReportPageKemahasiswaan extends StatelessWidget {
           ],
         ),
         trailing: GestureDetector(
-          child:  Icon(icon, color: Colors.red, size: 24,),
-          onTap: () => {
-            _showOptions(context)
-          },
+          child: Icon(
+            icon,
+            color: Colors.red,
+            size: 24,
+          ),
+          onTap: () => {_showOptions(context)},
         ),
       ),
     );
@@ -113,16 +156,17 @@ class ReportPageKemahasiswaan extends StatelessWidget {
       builder: (BuildContext context) {
         return Container(
           child: Wrap(
-            children:[
+            children: [
               ListTile(
                 leading: Icon(Icons.search),
                 title: Text('Detail'),
                 onTap: () {
-                  // Handle delete option
+                  // Handle detail option
                   Navigator.pop(context);
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => DetailLaporanKemahasiswan("Detail")),
+                    MaterialPageRoute(
+                        builder: (context) => DetailLaporanKemahasiswan("Detail")),
                   );
                 },
               ),
@@ -132,7 +176,4 @@ class ReportPageKemahasiswaan extends StatelessWidget {
       },
     );
   }
-
 }
-
-
