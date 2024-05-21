@@ -5,19 +5,8 @@ import 'package:ayolapor/home.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'GlobalConfig.dart';
 
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: BeritaPage(),
-    );
-  }
-}
 
 class BeritaPage extends StatefulWidget {
   @override
@@ -50,7 +39,7 @@ class _BeritaPageState extends State<BeritaPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Berita',
           style: TextStyle(
             color: Colors.red,
@@ -58,6 +47,7 @@ class _BeritaPageState extends State<BeritaPage> {
           ),
         ),
         centerTitle: true,
+        elevation: 4,
         leading: IconButton(
           icon: const Icon(
             Icons.keyboard_arrow_left,
@@ -65,14 +55,9 @@ class _BeritaPageState extends State<BeritaPage> {
             size: 24,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            ); // Menggunakan Navigator.pushNamed
+            Navigator.pop(context);
           },
         ),
-        elevation: 4,
-        automaticallyImplyLeading: false,
       ),
       body: _futureNews.isEmpty? Center(child: CupertinoActivityIndicator(),):
        ListView.builder(
@@ -121,3 +106,4 @@ class _BeritaPageState extends State<BeritaPage> {
     );
   }
 }
+
