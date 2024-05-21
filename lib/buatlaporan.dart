@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
@@ -9,7 +11,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'GlobalConfig.dart';
 
 
-void main() {
+Future<void> main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  if (Firebase.apps.isEmpty) {
+    await Firebase.initializeApp();
+  }
+  FirebaseMessaging.instance.subscribeToTopic('report_submitted');
   runApp(MyApp());
 }
 
@@ -77,55 +84,51 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
   List<String> _pilihan = ['Seksual', 'Bullying', 'Kekerasan Fisik'];
 
   // Method untuk menghandle submit form
-  void _submitForm(String status) async {
-    String judul = _judulController.text;
-    String type = _typeController.text;
-    String isi = _isiController.text;
-    String? imagePath =
-        _filePath; // Assuming _filePath stores the path of the selected image
+Future<void> _submitForm(String status) async {
+  String judul = _judulController.text;
+  String type = _typeController.text;
+  String isi = _isiController.text;
+  String? imagePath = _filePath; // Assuming _filePath stores the path of the selected image
 
-    // Create a multipart request
-    var request = http.MultipartRequest(
-        'POST', Uri.parse(GlobalsConfig.url_api + 'report'));
+  // Create a multipart request
+  var request = http.MultipartRequest('POST', Uri.parse(GlobalsConfig.url_api + 'report'));
 
-    // Add form fields
-    request.fields['title'] = judul;
-    request.fields['type'] = type;
-    request.fields['mahasiswa'] = '1';
+  // Add form fields
+  request.fields['title'] = judul;
+  request.fields['type'] = type;
+  request.fields['mahasiswa'] = '1';
 
-    // Set status based on the parameter
-    if (status == 'draft') {
-      request.fields['status'] = "Save as Draft";
-    } else if (status == 'submitted') {
-      request.fields['status'] = "Submitted to Dosen Wali";
-    }
+  // Set status based on the parameter
+  if (status == 'draft') {
+    request.fields['status'] = "Save as Draft";
+  } else if (status == 'submitted') {
+    request.fields['status'] = "Submitted to Dosen Wali";
+  }
 
-    request.fields['dosen_wali'] = '3';
-    request.fields['description'] = isi;
+  request.fields['dosen_wali'] = '3';
+  request.fields['description'] = isi;
 
-    // Add image file
-    if (imagePath != null) {
-      String fileName = path.basename(imagePath);
-      var imageFile = await http.MultipartFile.fromPath('prove', imagePath);
-      request.files.add(imageFile);
-    }
+  // Add image file
+  if (imagePath != null) {
+    String fileName = path.basename(imagePath);
+    var imageFile = await http.MultipartFile.fromPath('prove', imagePath);
+    request.files.add(imageFile);
+  }
 
-    // Send the request
-    var streamedResponse = await request.send();
+  // Send the request
+  var streamedResponse = await request.send();
 
-    // Handle the response
-    var response = await http.Response.fromStream(streamedResponse);
-    var responseBody = json.decode(response.body);
+  // Handle the response
+  var response = await http.Response.fromStream(streamedResponse);
+  var responseBody = json.decode(response.body);
 
-    if (responseBody['status']) {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      prefs.setString('title', judul);
-      prefs.setString('description', isi);
-      prefs.setString('image', path.basename(imagePath!));
-    } else {
-      print(responseBody);
-    }
-
+  if (responseBody['status']) {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString('title', judul);
+    prefs.setString('description', isi);
+    prefs.setString('image', path.basename(imagePath!));
+    
+    // Show success message
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text(
@@ -135,14 +138,17 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
         backgroundColor: Colors.green,
       ),
     );
-
-    setState(() {
-      _filePath = null;
-      _judulController.clear();
-      _typeController.clear();
-      _isiController.clear();
-    });
+  } else {
+    print(responseBody);
   }
+
+  setState(() {
+    _filePath = null;
+    _judulController.clear();
+    _typeController.clear();
+    _isiController.clear();
+  });
+}
 
   // Method to handle image selection
   void _selectImage() async {
