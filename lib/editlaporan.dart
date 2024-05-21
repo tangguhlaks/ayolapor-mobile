@@ -4,18 +4,18 @@ import 'package:ayolapor/GlobalConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class DetailLaporan extends StatefulWidget {
+class EditLaporan extends StatefulWidget {
   final String type;
   final String id;
 
-  DetailLaporan(this.type, this.id);
+  EditLaporan(this.type, this.id);
 
   @override
-  _DetailLaporanState createState() => _DetailLaporanState();
+  _EditLaporanState createState() => _EditLaporanState();
 }
 
-class _DetailLaporanState extends State<DetailLaporan> {
-  Map<String, dynamic> detailData = {};
+class _EditLaporanState extends State<EditLaporan> {
+  Map<String, dynamic> editData = {};
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _DetailLaporanState extends State<DetailLaporan> {
       Map<String, dynamic> decodedBody = json.decode(responseBody);
 
       setState(() {
-        detailData = decodedBody['data'];
+        editData = decodedBody['data'];
       });
     } else {
       print(response.reasonPhrase);
@@ -88,11 +88,11 @@ class _DetailLaporanState extends State<DetailLaporan> {
         ),
         elevation: 4,
       ),
-      body: DetailLaporanBody(),
+      body: EditLaporanBody(),
     );
   }
 
-  Widget DetailLaporanBody() {
+  Widget EditLaporanBody() {
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
@@ -113,10 +113,9 @@ class _DetailLaporanState extends State<DetailLaporan> {
                     horizontal: 15.0), // Padding inside the container
                 child: TextField(
                   decoration: InputDecoration(
-                    labelText: detailData["title"],
+                    labelText: editData["title"],
                     border: InputBorder.none, // Optional: remove border
                   ),
-                  enabled: false,
                 ),
               ),
             ),
@@ -135,10 +134,9 @@ class _DetailLaporanState extends State<DetailLaporan> {
                     horizontal: 15.0), // Padding inside the container
                 child: TextField(
                   decoration: InputDecoration(
-                    labelText: detailData["type"],
+                    labelText: editData["type"],
                     border: InputBorder.none, // Optional: remove border
                   ),
-                  enabled: false,
                 ),
               ),
             ),
@@ -150,7 +148,7 @@ class _DetailLaporanState extends State<DetailLaporan> {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(
-                      'https://ayolapor-api.evolve-innovation.com/assets/prove/${detailData['prove']}'), // Assuming 'image' is the key for the image URL
+                      'https://ayolapor-api.evolve-innovation.com/assets/prove/${editData['prove']}'), // Assuming 'image' is the key for the image URL
                   fit: BoxFit.cover,
                 ),
               ),
@@ -171,10 +169,9 @@ class _DetailLaporanState extends State<DetailLaporan> {
                   minLines: 5, // Jumlah minimal baris
                   maxLines: null,
                   decoration: InputDecoration(
-                    labelText: detailData['description'],
+                    labelText: editData['description'],
                     border: InputBorder.none, // Optional: remove border
                   ),
-                  enabled: false,
                 ),
               ),
             ),

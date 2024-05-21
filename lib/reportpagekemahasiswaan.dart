@@ -18,7 +18,6 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
     fetchReports();
   }
 
-
   Future<void> fetchReports() async {
     var headers = {
       'Cookie':
@@ -29,7 +28,11 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
         Uri.parse(
             'https://ayolapor-api.evolve-innovation.com/api/report-by-status'));
     request.fields.addAll({
-      'status':  json.encode(['Need Approve By Kemahasiswaan', 'Report Process By Kemahasiswaan','Report Rejected By Kemahasiswaan']),
+      'status': json.encode([
+        'Need Approve By Kemahasiswaan',
+        'Report Process By Kemahasiswaan',
+        'Report Rejected By Kemahasiswaan'
+      ]),
     });
 
     request.headers.addAll(headers);
@@ -79,13 +82,16 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
           itemBuilder: (BuildContext context, int index) {
             var report = reports[index];
             return buildOption(
-              context,
-              report['title']+' - '+report['first_name']+' '+report['last_name'],
-              Icons.more_vert,
-              report['created_at'],
-              report['status'],
-              report['id'].toString()
-            );
+                context,
+                report['title'] +
+                    ' - ' +
+                    report['first_name'] +
+                    ' ' +
+                    report['last_name'],
+                Icons.more_vert,
+                report['created_at'],
+                report['status'],
+                report['id'].toString());
           },
         ),
       ),
@@ -93,10 +99,9 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
   }
 
   Widget buildOption(BuildContext context, String text, IconData icon,
-      String date, String status,String id) {
+      String date, String status, String id) {
     Color statusColor = Colors.red;
-    if (status == 'Selesai' ||
-        status == 'Sudah Ditindak Lanjut Dosen Wali') {
+    if (status == 'Selesai' || status == 'Sudah Ditindak Lanjut Dosen Wali') {
       statusColor = Colors.green;
     } else if (status == 'Save Draft') {
       statusColor = Colors.yellow;
@@ -146,13 +151,13 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
             color: Colors.red,
             size: 24,
           ),
-          onTap: () => {_showOptions(context,id)},
+          onTap: () => {_showOptions(context, id)},
         ),
       ),
     );
   }
 
-  void _showOptions(BuildContext context,String id) {
+  void _showOptions(BuildContext context, String id) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -160,21 +165,21 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
           child: Wrap(
             children: [
               ListTile(
-                leading: Icon(Icons.search),
-                title: Text('Detail'),
-               onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailLaporanKemahasiswan("Detail", id),
-                    ),
-                  ).then((value) {
-                    // Reload data after returning from the detail page
-                    fetchReports();
-                    Navigator.pop(context);
-                  });
-                }
-              ),
+                  leading: Icon(Icons.search),
+                  title: Text('Detail'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            DetailLaporanKemahasiswan("Detail", id),
+                      ),
+                    ).then((value) {
+                      // Reload data after returning from the detail page
+                      fetchReports();
+                      Navigator.pop(context);
+                    });
+                  }),
             ],
           ),
         );

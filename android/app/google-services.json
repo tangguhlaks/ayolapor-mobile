@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "248893697348",
+    "project_id": "ayolapor-bae19",
+    "storage_bucket": "ayolapor-bae19.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248893697348:android:5a0ce92c6b55e1c54e3b11",
+        "android_client_info": {
+          "package_name": "com.example.ayolapor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAL6D6HFeIdyR7WKCpJ2pKXZ6XztNJtROg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

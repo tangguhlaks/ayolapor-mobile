@@ -1,12 +1,13 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'GlobalConfig.dart';
+
 
 void main() {
   runApp(MyApp());
@@ -76,13 +77,12 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
   List<String> _pilihan = ['Seksual', 'Bullying', 'Kekerasan Fisik'];
 
   // Method untuk menghandle submit form
-  void _submitForm() async {
+  void _submitForm(String status) async {
     String judul = _judulController.text;
     String type = _typeController.text;
     String isi = _isiController.text;
-    String imagePath =
-        _filePath!;
-         // Assuming _filePath stores the path of the selected image
+    String? imagePath =
+        _filePath; // Assuming _filePath stores the path of the selected image
 
     // Create a multipart request
     var request = http.MultipartRequest(
@@ -92,13 +92,20 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
     request.fields['title'] = judul;
     request.fields['type'] = type;
     request.fields['mahasiswa'] = '1';
-    request.fields['status'] = "Save as Draft";
+
+    // Set status based on the parameter
+    if (status == 'draft') {
+      request.fields['status'] = "Save as Draft";
+    } else if (status == 'submitted') {
+      request.fields['status'] = "Submitted to Dosen Wali";
+    }
+
     request.fields['dosen_wali'] = '3';
     request.fields['description'] = isi;
 
     // Add image file
     if (imagePath != null) {
-      fileName = path.basename(imagePath);
+      String fileName = path.basename(imagePath);
       var imageFile = await http.MultipartFile.fromPath('prove', imagePath);
       request.files.add(imageFile);
     }
@@ -114,8 +121,7 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('title', judul);
       prefs.setString('description', isi);
-      prefs.setString('title', judul);
-      prefs.setString('image', fileName!);
+      prefs.setString('image', path.basename(imagePath!));
     } else {
       print(responseBody);
     }
@@ -129,6 +135,7 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
         backgroundColor: Colors.green,
       ),
     );
+
     setState(() {
       _filePath = null;
       _judulController.clear();
@@ -139,15 +146,48 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
 
   // Method to handle image selection
   void _selectImage() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.image,
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () async {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                    type: FileType.image,
+                  );
+                  if (result != null) {
+                    setState(() {
+                      _filePath = result.files.single.path!;
+                    });
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text('Camera'),
+                onTap: () async {
+                  final picker = ImagePicker();
+                  final pickedFile =
+                      await picker.pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    setState(() {
+                      _filePath = pickedFile.path;
+                    });
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
     );
-
-    if (result != null) {
-      setState(() {
-        _filePath = result.files.single.path!;
-      });
-    }
   }
 
   @override
@@ -262,10 +302,25 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
         SizedBox(height: 16.0), // Spasi antara field
         // Tombol untuk submit
         ElevatedButton(
-          onPressed: _submitForm,
+          onPressed: () => _submitForm('draft'),
           child: Text('Save As Draft', style: TextStyle(color: Colors.white)),
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () => _submitForm('submitted'),
+          child: Text('Submitted to Dosen Wali',
+              style: TextStyle(color: Colors.white)),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
+          ),
+        ),
+        ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text('Kembali', style: TextStyle(color: Colors.white)),
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
           ),
         ),
       ],
