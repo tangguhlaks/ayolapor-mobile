@@ -1,8 +1,10 @@
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:ayolapor/GlobalConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:file_picker/file_picker.dart';
+import 'package:image_picker/image_picker.dart';
 
 class EditLaporan extends StatefulWidget {
   final String type;
@@ -16,16 +18,23 @@ class EditLaporan extends StatefulWidget {
 
 class _EditLaporanState extends State<EditLaporan> {
   Map<String, dynamic> editData = {};
+  TextEditingController titleController = TextEditingController();
+  TextEditingController typeController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+
+  List<String> _pilihan = ['Seksual', 'Bullying', 'Kekerasan Fisik'];
+  String? _selectedType;
+  String? _filePath;
 
   @override
   void initState() {
+    super.initState();
     fetchData();
   }
 
   Future<void> fetchData() async {
     var headers = {
-      'Cookie':
-          'XSRF-TOKEN=eyJpdiI6ImhjekZVVFREM1k3QVkwUCtZUkVpc0E9PSIsInZhbHVlIjoibGJ6VjBDc3BIdVBLSHc4TXZabCtsaTFBOHp3RDYxSzdmZmpYdGtzY3NqVUFDeTdiZ05RbXF5UXI2TDhRdXNsT0dURGZFU3R5dnI0eVRsNTd0K0JIWmVsSTNmNHRNSmRjMUpjVDg3MnFScjFHNEw4T3ZYNzBadGdnZHk2RlUwdTIiLCJtYWMiOiI1ZTIxNGFkZDg0ZjBkYjg0NDI4NWJiZDYwMzhmZTQyYTQwMzZmNWI0MDllODVjOWZmZGViN2RmZTBhY2IzNTM1IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ik1vakRIS2Jxb2dwWmVrL2FYdUQ4c1E9PSIsInZhbHVlIjoiaW8wR2xlMTFaUk8rVnEvZ0tLalJCN2lSd1NVUXZtbFJFeFR3b3p5MjNyYmxmcEJKRy85SVR2Y1AxWUVqWUdoT2s4UE5rM3ZTQjVhTWQrRnlRRy9HWldFQUdvcllwZ1FnanJJdVUvcjljdWkvemdMNE5ieEczOEtXYUMrQ1oyczUiLCJtYWMiOiJmYTA4NzAxYmRiYTBkYmI2NzM4ZmI2MTQwMDBlZTc3MTZkMmUzMzAzNWIyOTM0NGMwY2YyNmVjYjIxYjg4NzEwIiwidGFnIjoiIn0%3D'
+      'Cookie': 'XSRF-TOKEN=your_token_here; laravel_session=your_session_here'
     };
     var request = http.MultipartRequest(
         'GET', Uri.parse(GlobalsConfig.url_api + 'report/' + widget.id));
@@ -40,28 +49,114 @@ class _EditLaporanState extends State<EditLaporan> {
 
       setState(() {
         editData = decodedBody['data'];
+        titleController.text = editData['title'];
+        typeController.text = editData['type'];
+        descriptionController.text = editData['description'];
+        _selectedType = editData['type'];
+        _filePath = editData['prove'];
       });
     } else {
       print(response.reasonPhrase);
     }
   }
 
-  void updateStatus(String status) async {
+  void updateData() async {
     var headers = {
-      'Cookie':
-          'XSRF-TOKEN=eyJpdiI6Ind1dHpicmgxZ2lSaGp0MjZTZ0hUWEE9PSIsInZhbHVlIjoiKzNoTE95WVFtaUhSVVRQakMwUDdUVmpUaHYrOTJsVEhGaTlmYVY5bmlncWVJZjJRYUNGN2szWlF1MFBaa080S3NFUytVZlduSzZPeXprRjU2U0VZVDJTTHBKcW4wMHArdHE5MlJWRWYrUkN6NlF4Uzl0UDBIRW5PaWFOQkFzWUwiLCJtYWMiOiJhN2JmZjYzZjc5OTRiNGU5ZGQ1NzdjM2QyNTM1ZjBkMTE1MjNjN2UyMTU0NmE5NjdkYTZlNDA3ZTM2MjNiZjRhIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImdkM0k4MWJPbEYvYzJLNUt2dWN4Ync9PSIsInZhbHVlIjoiOThGU21wZld6THdLMTZQVnNyVURVOTZzUjV0U29OelJudmxHWVJyUHM1OUR0WUhOZURRQ2Z3YS9CNDNhS1NybUZiS2l2QTF3eFM1bjlkWnBCQ2V0Vkg2VlE5a21mcTVEdFhJSHo0WjgwUEVmSnU2ekdZQmRBaE9TVWVpYmd1QjMiLCJtYWMiOiJmZTI4MTlhYzBiZDJjZTc1YzgzNmRiZWVjOGMwOGU4MjEwMTY3NGY0ZTAzNmQzOGU4NWZhOGEwODNhNmU3MDgxIiwidGFnIjoiIn0%3D'
+      'Content-Type': 'application/json',
+      'Cookie': 'XSRF-TOKEN=your_token_here; laravel_session=your_session_here'
     };
     var request = http.MultipartRequest(
-        'PUT',
-        Uri.parse(GlobalsConfig.url_api +
-            'report-update-status/' +
-            widget.id +
-            '?status=' +
-            status));
+        'PUT', Uri.parse(GlobalsConfig.url_api + 'report/' + widget.id));
 
     request.headers.addAll(headers);
 
+    request.fields['title'] = titleController.text;
+    request.fields['type'] = _selectedType!;
+    request.fields['description'] = descriptionController.text;
+
+    if (_filePath != null) {
+      try {
+        final file = File(_filePath!);
+        if (await file.exists()) {
+          print("File exists: $_filePath");
+          request.files
+              .add(await http.MultipartFile.fromPath('prove', _filePath!));
+        } else {
+          print("File not found: $_filePath");
+        }
+      } catch (e) {
+        print("Error accessing file: $e");
+      }
+    }
+
     http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print("Update successful");
+      final responseBody = await response.stream.bytesToString();
+      print("Response body: $responseBody");
+    } else {
+      print("Update failed: ${response.reasonPhrase}");
+      final responseBody = await response.stream.bytesToString();
+      print("Response body: $responseBody");
+    }
+  }
+
+  void _selectImage() async {
+    if (_filePath != null) {
+      try {
+        final file = File(_filePath!);
+        if (await file.exists()) {
+          await file.delete();
+          print("Deleted old file: $_filePath");
+        }
+      } catch (e) {
+        print("Error deleting old file: $e");
+      }
+    }
+
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return SafeArea(
+          child: Wrap(
+            children: <Widget>[
+              ListTile(
+                leading: Icon(Icons.photo_library),
+                title: Text('Gallery'),
+                onTap: () async {
+                  FilePickerResult? result =
+                      await FilePicker.platform.pickFiles(
+                    type: FileType.image,
+                  );
+                  if (result != null) {
+                    setState(() {
+                      _filePath = result.files.single.path;
+                    });
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.photo_camera),
+                title: Text('Camera'),
+                onTap: () async {
+                  final picker = ImagePicker();
+                  final pickedFile =
+                      await picker.pickImage(source: ImageSource.camera);
+                  if (pickedFile != null) {
+                    setState(() {
+                      _filePath = pickedFile.path;
+                    });
+                  }
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -100,21 +195,20 @@ class _EditLaporanState extends State<EditLaporan> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(height: 10),
-            Text("Title", style: TextStyle(fontWeight: FontWeight.bold)),
+            Text("Judul", style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             Container(
+              width: double.infinity, // Full width
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
-                borderRadius:
-                    BorderRadius.circular(10.0), // Optional: rounded corners
+                borderRadius: BorderRadius.circular(10.0),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 15.0), // Padding inside the container
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: TextField(
+                  controller: titleController,
                   decoration: InputDecoration(
-                    labelText: editData["title"],
-                    border: InputBorder.none, // Optional: remove border
+                    border: InputBorder.none,
                   ),
                 ),
               ),
@@ -124,18 +218,27 @@ class _EditLaporanState extends State<EditLaporan> {
                 style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             Container(
+              width: double.infinity, // Full width
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
-                borderRadius:
-                    BorderRadius.circular(10.0), // Optional: rounded corners
+                borderRadius: BorderRadius.circular(10.0),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 15.0), // Padding inside the container
-                child: TextField(
-                  decoration: InputDecoration(
-                    labelText: editData["type"],
-                    border: InputBorder.none, // Optional: remove border
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: _selectedType,
+                    items: _pilihan.map((String value) {
+                      return DropdownMenuItem<String>(
+                        value: value,
+                        child: Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (newValue) {
+                      setState(() {
+                        _selectedType = newValue;
+                      });
+                    },
                   ),
                 ),
               ),
@@ -143,47 +246,74 @@ class _EditLaporanState extends State<EditLaporan> {
             SizedBox(height: 10),
             Text("Bukti", style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
-            Container(
-              height: 150,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(
-                      'https://ayolapor-api.evolve-innovation.com/assets/prove/${editData['prove']}'), // Assuming 'image' is the key for the image URL
-                  fit: BoxFit.cover,
+            GestureDetector(
+              onTap: _selectImage,
+              child: Container(
+                width: double.infinity, // Full width
+                height: 150,
+                decoration: BoxDecoration(
+                  image: _filePath != null
+                      ? DecorationImage(
+                          image: File(_filePath!).existsSync()
+                              ? FileImage(File(_filePath!))
+                              : NetworkImage(
+                                      'https://ayolapor-api.evolve-innovation.com/assets/prove/$_filePath')
+                                  as ImageProvider,
+                          fit: BoxFit.cover,
+                        )
+                      : null,
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
+                child: _filePath == null
+                    ? Center(child: Text("Tap to select image"))
+                    : null,
               ),
             ),
             SizedBox(height: 10),
             Text("Keterangan", style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
             Container(
+              width: double.infinity, // Full width
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
-                borderRadius:
-                    BorderRadius.circular(10.0), // Optional: rounded corners
+                borderRadius: BorderRadius.circular(10.0),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: 15.0), // Padding inside the container
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: TextField(
-                  minLines: 5, // Jumlah minimal baris
+                  controller: descriptionController,
+                  minLines: 5,
                   maxLines: null,
                   decoration: InputDecoration(
-                    labelText: editData['description'],
-                    border: InputBorder.none, // Optional: remove border
+                    border: InputBorder.none,
                   ),
                 ),
               ),
             ),
             SizedBox(height: 20),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: updateData, // Update data input
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.blue),
+                ),
+                child: Text(
+                  'Update',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
             SizedBox(height: 8),
             SizedBox(
               width: double.infinity,
-              height: 50, // Mengatur tinggi tombol
+              height: 50,
               child: ElevatedButton(
                 onPressed: () {
-                  updateStatus("Report Finish");
-                  Navigator.pop(context);
+                  Navigator.pop(context); // Hanya kembali ke halaman sebelumnya
                 },
                 style: ButtonStyle(
                   backgroundColor:
@@ -194,7 +324,7 @@ class _EditLaporanState extends State<EditLaporan> {
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

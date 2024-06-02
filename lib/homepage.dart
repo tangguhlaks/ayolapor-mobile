@@ -261,7 +261,7 @@ class _MahasiswaHomePageState extends State<_MahasiswaHomePage> {
                   children: [
                     Icon(
                       Icons.assignment_turned_in,
-                      color: Colors.red,
+                      color: Colors.yellow,
                       size: 20,
                     ),
                     SizedBox(width: 5),
@@ -279,7 +279,7 @@ class _MahasiswaHomePageState extends State<_MahasiswaHomePage> {
                   children: [
                     Icon(
                       Icons.assignment_turned_in,
-                      color: Colors.red,
+                      color: Colors.blue,
                       size: 20,
                     ),
                     SizedBox(width: 5),

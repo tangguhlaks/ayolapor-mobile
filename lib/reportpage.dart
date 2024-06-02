@@ -170,10 +170,10 @@ class _ReportPageState extends State<ReportPage> {
   Widget buildOption(BuildContext context, String text, IconData icon,
       String date, String status, String id) {
     Color statusColor = Colors.red;
-    if (status == 'Selesai' || status == 'Sudah Ditindak Lanjut Dosen Wali') {
+    if (status == 'Report Finish' || status == 'Finish') {
       statusColor = Colors.green;
-    } else if (status == 'Save Draft') {
-      statusColor = Colors.yellow;
+    } else if (status == 'Save as Draft') {
+      statusColor = Colors.blue;
     }
 
     return Container(
@@ -220,63 +220,119 @@ class _ReportPageState extends State<ReportPage> {
             color: Colors.red,
             size: 24,
           ),
-          onTap: () => {_showOptions(context, id)},
+          onTap: () => {_showOptions(context, id, status)},
         ),
       ),
     );
   }
 
-  void _showOptions(BuildContext context, String id) {
+  void _showOptions(BuildContext context, String id, String status) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: Icon(Icons.search),
-                title: Text('Detail'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => DetailLaporan("Detail", id),
-                    ),
-                  ).then((value) {
-                    // Reload data after returning from the detail page
+        if (status == 'Save as Draft') {
+          return Container(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.search),
+                  title: Text('Detail'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailLaporan("Detail", id),
+                      ),
+                    ).then((value) {
+                      // Reload data after returning from the detail page
+                      fetchReports();
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.edit),
+                  title: Text('Edit'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditLaporan("Edit", id),
+                      ),
+                    ).then((value) {
+                      // Reload data after returning from the detail page
+                      fetchReports();
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.delete),
+                  title: Text('Delete'),
+                  onTap: () {
+                    deleteReport(id);
                     fetchReports();
                     Navigator.pop(context);
-                  });
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.edit),
-                title: Text('Edit'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditLaporan("Edit", id),
-                    ),
-                  ).then((value) {
-                    // Reload data after returning from the detail page
-                    fetchReports();
-                    Navigator.pop(context);
-                  });
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.delete),
-                title: Text('Delete'),
-                onTap: () {
-                  deleteReport(id);
-                  fetchReports();
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
-        );
+                  },
+                ),
+              ],
+            ),
+          );
+        } else if (status == 'Report Finish' ||
+            status == 'Finish' ||
+            status == 'Report Rejected By Dosen Wali' ||
+            status == 'Process By Dosen Wali' ||
+            status == 'Report Rejected By Kemahasiswaan' ||
+            status == 'Report Process By Kemahasiswaan' ||
+            status == 'Need Approve By Kemahasiswaan' ||
+            status == 'Submitted to Dosen Wali') {
+          return Container(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.search),
+                  title: Text('Detail'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailLaporan("Detail", id),
+                      ),
+                    ).then((value) {
+                      // Reload data after returning from the detail page
+                      fetchReports();
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ],
+            ),
+          );
+        } else {
+          // Default case: just show Detail
+          return Container(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.search),
+                  title: Text('Detail'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailLaporan("Detail", id),
+                      ),
+                    ).then((value) {
+                      // Reload data after returning from the detail page
+                      fetchReports();
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ],
+            ),
+          );
+        }
       },
     );
   }

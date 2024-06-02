@@ -185,8 +185,7 @@ class _DetailLaporanState extends State<DetailLaporan> {
               height: 50, // Mengatur tinggi tombol
               child: ElevatedButton(
                 onPressed: () {
-                  updateStatus("Report Finish");
-                  Navigator.pop(context);
+                  Navigator.pop(context); // Hanya kembali ke halaman sebelumnya
                 },
                 style: ButtonStyle(
                   backgroundColor:
