@@ -1,7 +1,12 @@
-import 'package:flutter/material.dart';
 import 'package:ayolapor/buatlaporan.dart';
-import 'package:ayolapor/home.dart';
 import 'package:ayolapor/detaillaporan.dart';
+import 'package:ayolapor/editlaporan.dart';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
+
+import 'GlobalConfig.dart';
 
 class ReportPage extends StatefulWidget {
   @override
@@ -9,152 +14,166 @@ class ReportPage extends StatefulWidget {
 }
 
 class _ReportPageState extends State<ReportPage> {
-  ScrollController _scrollController = ScrollController();
-  bool _isLoading = false;
-  int _page = 1; // Nomor halaman
-
-  List<String> _reportData = [
-    // Data laporan Anda
-    'Lord Tangguh - 20 Mei 2023 - Menunggu Tindak Lanjut Kemahasiswaan',
-    'Lord Tangguh - 20 Mei 2023 - Menunggu Tindak Lanjut Dosen Wali',
-    'Lord Tangguh - 20 Mei 2023 - Sudah Ditindak Lanjut Dosen Wali',
-    'Lord Tangguh - 20 Mei 2023 - Save Draft',
-    'Lord Tangguh - 20 Mei 2023 - Selesai',
-    'Lord Tangguh - 20 Mei 2023 - Laporan Dibatalkan',
-    'Lord Tangguh - 20 Mei 2023 - Menunggu Tindak Lanjut Kemahasiswaan',
-  ];
+  List<dynamic> reports = [];
+  String username = '';
+  String role = '';
 
   @override
   void initState() {
     super.initState();
-    _scrollController.addListener(_onScroll);
+    fetchReports();
+  }
+
+  Future<void> fetchReports() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      username = prefs.getString('username') ?? '';
+      role = prefs.getString('role') ?? '';
+    });
+    var headers = {
+      'Cookie':
+          'XSRF-TOKEN=eyJpdiI6ImhjekZVVFREM1k3QVkwUCtZUkVpc0E9PSIsInZhbHVlIjoibGJ6VjBDc3BIdVBLSHc4TXZabCtsaTFBOHp3RDYxSzdmZmpYdGtzY3NqVUFDeTdiZ05RbXF5UXI2TDhRdXNsT0dURGZFU3R5dnI0eVRsNTd0K0JIWmVsSTNmNHRNSmRjMUpjVDg3MnFScjFHNEw4T3ZYNzBadGdnZHk2RlUwdTIiLCJtYWMiOiI1ZTIxNGFkZDg0ZjBkYjg0NDI4NWJiZDYwMzhmZTQyYTQwMzZmNWI0MDllODVjOWZmZGViN2RmZTBhY2IzNTM1IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ik1vakRIS2Jxb2dwWmVrL2FYdUQ4c1E9PSIsInZhbHVlIjoiaW8wR2xlMTFaUk8rVnEvZ0tLalJCN2lSd1NVUXZtbFJFeFR3b3p5MjNyYmxmcEJKRy85SVR2Y1AxWUVqWUdoT2s4UE5rM3ZTQjVhTWQrRnlRRy9HWldFQUdvcllwZ1FnanJJdVUvcjljdWkvemdMNE5ieEczOEtXYUMrQ1oyczUiLCJtYWMiOiJmYTA4NzAxYmRiYTBkYmI2NzM4ZmI2MTQwMDBlZTc3MTZkMmUzMzAzNWIyOTM0NGMwY2YyNmVjYjIxYjg4NzEwIiwidGFnIjoiIn0%3D'
+    };
+    var request = http.MultipartRequest(
+        'GET',
+        Uri.parse(
+            'https://ayolapor-api.evolve-innovation.com/api/report-by-username/' +
+                username));
+    request.fields.addAll({
+      // 'status':  json.encode(['Need Approve By Kemahasiswaan', 'Report Process By Kemahasiswaan','Report Rejected By Kemahasiswaan']),
+    });
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> decodedBody = json.decode(responseBody);
+
+      setState(() {
+        reports = decodedBody['data'];
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  Future<void> deleteReport(String id) async {
+    var headers = {
+      'Cookie':
+          'XSRF-TOKEN=eyJpdiI6ImhjekZVVFREM1k3QVkwUCtZUkVpc0E9PSIsInZhbHVlIjoibGJ6VjBDc3BIdVBLSHc4TXZabCtsaTFBOHp3RDYxSzdmZmpYdGtzY3NqVUFDeTdiZ05RbXF5UXI2TDhRdXNsT0dURGZFU3R5dnI0eVRsNTd0K0JIWmVsSTNmNHRNSmRjMUpjVDg3MnFScjFHNEw4T3ZYNzBadGdnZHk2RlUwdTIiLCJtYWMiOiI1ZTIxNGFkZDg0ZjBkYjg0NDI4NWJiZDYwMzhmZTQyYTQwMzZmNWI0MDllODVjOWZmZGViN2RmZTBhY2IzNTM1IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ik1vakRIS2Jxb2dwWmVrL2FYdUQ4c1E9PSIsInZhbHVlIjoiaW8wR2xlMTFaUk8rVnEvZ0tLalJCN2lSd1NVUXZtbFJFeFR3b3p5MjNyYmxmcEJKRy85SVR2Y1AxWUVqWUdoT2s4UE5rM3ZTQjVhTWQrRnlRRy9HWldFQUdvcllwZ1FnanJJdVUvcjljdWkvemdMNE5ieEczOEtXYUMrQ1oyczUiLCJtYWMiOiJmYTA4NzAxYmRiYTBkYmI2NzM4ZmI2MTQwMDBlZTc3MTZkMmUzMzAzNWIyOTM0NGMwY2YyNmVjYjIxYjg4NzEwIiwidGFnIjoiIn0%3D'
+    };
+    var request = http.MultipartRequest('DELETE',
+        Uri.parse('https://ayolapor-api.evolve-innovation.com/api/report/$id'));
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      setState(() {
+        reports.removeWhere((report) => report['id'] == id);
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Report deleted successfully'),
+        ),
+      );
+    } else {
+      print(response.reasonPhrase);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to delete report'),
+        ),
+      );
+    }
   }
 
   @override
-  void dispose() {
-    _scrollController.dispose();
-    super.dispose();
-  }
-
-  void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      _fetchData();
-    }
-  }
-
-  Future<void> _fetchData() async {
-    if (!_isLoading) {
-      setState(() {
-        _isLoading = true;
-      });
-
-      // Simulasi penambahan data dengan delay 2 detik
-      await Future.delayed(Duration(seconds: 2));
-
-      setState(() {
-        _isLoading = false;
-        _page++; // Tambah halaman
-        // Tambah data laporan baru ke dalam _reportData
-        _reportData.addAll([
-            'Lord Tangguh - 20 Mei 2023 - Sudah Ditindak Lanjut Dosen Wali',
-            'Lord Tangguh - 20 Mei 2023 - Save Draft',
-            'Lord Tangguh - 20 Mei 2023 - Selesai',
-            'Lord Tangguh - 20 Mei 2023 - Laporan Dibatalkan',
-            'Lord Tangguh - 20 Mei 2023 - Menunggu Tindak Lanjut Kemahasiswaan',
-            'Lord Tangguh - 20 Mei 2023 - Laporan Dibatalkan',
-            'Lord Tangguh - 20 Mei 2023 - Menunggu Tindak Lanjut Kemahasiswaan',
-        ]);
-      });
-    }
-  }
-@override
-Widget build(BuildContext context) {
-  return Scaffold(
-    appBar: AppBar(
-      title: const Text(
-        'Tambah Laporan',
-        style: TextStyle(
-          color: Colors.red,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      centerTitle: true,
-      leading: IconButton(
-        icon: const Icon(
-          Icons.keyboard_arrow_left,
-          color: Colors.red,
-          size: 24,
-        ),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => Home()),
-          );
-        },
-      ),
-      elevation: 4,
-    ),
-    body: Column(
-      children: [
-        Padding(padding: const EdgeInsets.all(16.0),
-        child:SizedBox(
-          width: double.infinity,
-          height: 50, // Mengatur tinggi tombol
-          child: ElevatedButton(
-            onPressed: ()=>{
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => BuatLaporanPage()),
-              )
-            },
-            style: ButtonStyle(
-                backgroundColor:
-                    MaterialStateProperty.all<Color>(Colors.red)),
-            child: Text(
-              'Tambah Laporan',
-              style: TextStyle(color: Colors.white),
-            ),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Tambah Laporan',
+          style: TextStyle(
+            color: Colors.red,
+            fontWeight: FontWeight.bold,
           ),
         ),
+        centerTitle: true,
+        leading: IconButton(
+          icon: Icon(
+            Icons.keyboard_arrow_left,
+            color: Colors.red,
+            size: 24,
+          ),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
-        SizedBox(height: 2),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: ListView.builder(
-              controller: _scrollController,
-              itemCount: _reportData.length + (_isLoading ? 1 : 0),
-              itemBuilder: (BuildContext context, int index) {
-                if (index == _reportData.length) {
-                  return Center(
-                    child: CircularProgressIndicator(),
+        elevation: 4,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              height: 50, // Mengatur tinggi tombol
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => BuatLaporanPage()),
+                  ).then((value) {
+                    // Reload data after returning from the BuatLaporanPage
+                    fetchReports();
+                  });
+                },
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                ),
+                child: Text(
+                  'Tambah Laporan',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+
+            SizedBox(height: 16.0), // Tambahkan jarak antara tombol dan list
+            Expanded(
+              child: ListView.builder(
+                itemCount: reports.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var report = reports[index];
+                  return buildOption(
+                    context,
+                    report['title'] +
+                        ' - ' +
+                        report['first_name'] +
+                        ' ' +
+                        report['last_name'],
+                    Icons.more_vert,
+                    report['created_at'],
+                    report['status'],
+                    report['id'].toString(),
                   );
-                } else {
-                  return buildOption(context, _reportData[index]);
-                }
-              },
+                },
+              ),
             ),
-          ),
+          ],
         ),
-      ],
-    ),
-  );
-}
+      ),
+    );
+  }
 
-
-  Widget buildOption(BuildContext context, String data) {
-    // Pisahkan data menjadi komponen yang sesuai
-    List<String> reportComponents = data.split(' - ');
-    String text = reportComponents[0];
-    String date = reportComponents[1];
-    String status = reportComponents[2];
-
+  Widget buildOption(BuildContext context, String text, IconData icon,
+      String date, String status, String id) {
     Color statusColor = Colors.red;
-    if (status == 'Selesai' || status == 'Sudah Ditindak Lanjut Dosen Wali') {
+    if (status == 'Report Finish' || status == 'Finish') {
       statusColor = Colors.green;
-    } else if (status == 'Save Draft') {
-      statusColor = Colors.yellow;
+    } else if (status == 'Save as Draft') {
+      statusColor = Colors.blue;
     }
 
     return Container(
@@ -165,12 +184,15 @@ Widget build(BuildContext context) {
       ),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(horizontal: 16),
-        title: Text(text, style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
+        title: Text(text,
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14)),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(date, style: TextStyle(fontWeight: FontWeight.w100)),
-            SizedBox(height: 10),
+            SizedBox(
+              height: 10,
+            ),
             Container(
               padding: EdgeInsets.symmetric(vertical: 2, horizontal: 8),
               decoration: BoxDecoration(
@@ -181,7 +203,7 @@ Widget build(BuildContext context) {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 1,
                     blurRadius: 2,
-                    offset: Offset(0, 1),
+                    offset: Offset(0, 1), // changes position of shadow
                   ),
                 ],
               ),
@@ -193,54 +215,150 @@ Widget build(BuildContext context) {
           ],
         ),
         trailing: GestureDetector(
-          child: Icon(Icons.more_vert, color: Colors.red, size: 24),
-          onTap: () {
-            _showOptions(context);
-          },
+          child: Icon(
+            icon,
+            color: Colors.red,
+            size: 24,
+          ),
+          onTap: () => {_showOptions(context, id, status)},
         ),
       ),
     );
   }
 
-  void _showOptions(BuildContext context) {
+  void _showOptions(BuildContext context, String id, String status) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
-        return Container(
-          child: Wrap(
-            children: [
-              ListTile(
-                leading: Icon(Icons.search),
-                title: Text('Detail'),
-                onTap: () {
-                  // Handle detail option
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DetailLaporan("Detail")),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.edit),
-                title: Text('Edit'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => DetailLaporan("Edit")),
-                  );
-                },
-              ),
-              ListTile(
-                leading: Icon(Icons.close),
-                title: Text('Delete'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-            ],
-          ),
+        if (status == 'Save as Draft') {
+          return Container(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.search),
+                  title: Text('Detail'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailLaporan("Detail", id),
+                      ),
+                    ).then((value) {
+                      // Reload data after returning from the detail page
+                      fetchReports();
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.edit),
+                  title: Text('Edit'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditLaporan("Edit", id),
+                      ),
+                    ).then((value) {
+                      // Reload data after returning from the detail page
+                      fetchReports();
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+                ListTile(
+                  leading: Icon(Icons.delete),
+                  title: Text('Delete'),
+                  onTap: () {
+                    deleteReport(id);
+                    fetchReports();
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          );
+        } else if (status == 'Report Finish' ||
+            status == 'Finish' ||
+            status == 'Report Rejected By Dosen Wali' ||
+            status == 'Process By Dosen Wali' ||
+            status == 'Report Rejected By Kemahasiswaan' ||
+            status == 'Report Process By Kemahasiswaan' ||
+            status == 'Need Approve By Kemahasiswaan' ||
+            status == 'Submitted to Dosen Wali') {
+          return Container(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.search),
+                  title: Text('Detail'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailLaporan("Detail", id),
+                      ),
+                    ).then((value) {
+                      // Reload data after returning from the detail page
+                      fetchReports();
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ],
+            ),
+          );
+        } else {
+          // Default case: just show Detail
+          return Container(
+            child: Wrap(
+              children: [
+                ListTile(
+                  leading: Icon(Icons.search),
+                  title: Text('Detail'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DetailLaporan("Detail", id),
+                      ),
+                    ).then((value) {
+                      // Reload data after returning from the detail page
+                      fetchReports();
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ],
+            ),
+          );
+        }
+      },
+    );
+  }
+
+  void _confirmDelete(BuildContext context, String id) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Report"),
+          content: const Text("Are you sure you want to delete this report?"),
+          actions: <Widget>[
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text("Cancel"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                deleteReport(id); // Call the deleteReport function
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: const Text("Delete"),
+            ),
+          ],
         );
       },
     );

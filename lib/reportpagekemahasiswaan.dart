@@ -18,7 +18,6 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
     fetchReports();
   }
 
-
   Future<void> fetchReports() async {
     var headers = {
       'Cookie':
@@ -79,13 +78,16 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
           itemBuilder: (BuildContext context, int index) {
             var report = reports[index];
             return buildOption(
-              context,
-              report['title']+' - '+report['first_name']+' '+report['last_name'],
-              Icons.more_vert,
-              report['created_at'],
-              report['status'],
-              report['id'].toString()
-            );
+                context,
+                report['title'] +
+                    ' - ' +
+                    report['first_name'] +
+                    ' ' +
+                    report['last_name'],
+                Icons.more_vert,
+                report['created_at'],
+                report['status'],
+                report['id'].toString());
           },
         ),
       ),
@@ -93,10 +95,9 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
   }
 
   Widget buildOption(BuildContext context, String text, IconData icon,
-      String date, String status,String id) {
+      String date, String status, String id) {
     Color statusColor = Colors.red;
-    if (status == 'Selesai' ||
-        status == 'Sudah Ditindak Lanjut Dosen Wali') {
+    if (status == 'Selesai' || status == 'Sudah Ditindak Lanjut Dosen Wali') {
       statusColor = Colors.green;
     } else if (status == 'Save Draft') {
       statusColor = Colors.yellow;
