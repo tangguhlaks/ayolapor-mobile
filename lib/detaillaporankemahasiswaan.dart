@@ -21,6 +21,7 @@ class _DetailLaporanKemahasiswanState extends State<DetailLaporanKemahasiswan> {
 
   @override
   void initState() {
+    super.initState();
     fetchData();
   }
   Future<void> fetchData() async {
