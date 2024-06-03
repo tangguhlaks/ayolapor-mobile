@@ -29,7 +29,7 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
         Uri.parse(
             'https://ayolapor-api.evolve-innovation.com/api/report-by-status'));
     request.fields.addAll({
-      'status':  json.encode(['Need Approve By Kemahasiswaan', 'Report Process By Kemahasiswaan','Report Rejected By Kemahasiswaan']),
+      'status':  json.encode(['Submitted to Kemahasiswaan', 'Processed by Kemahasiswaan','Rejected by Kemahasiswaan','Finish']),
     });
 
     request.headers.addAll(headers);
@@ -146,13 +146,13 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
             color: Colors.red,
             size: 24,
           ),
-          onTap: () => {_showOptions(context,id)},
+          onTap: () => {_showOptions(context,id,status)},
         ),
       ),
     );
   }
 
-  void _showOptions(BuildContext context,String id) {
+  void _showOptions(BuildContext context,String id,String status) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -166,7 +166,7 @@ class _ReportPageKemahasiswaanState extends State<ReportPageKemahasiswaan> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DetailLaporanKemahasiswan("Detail", id),
+                      builder: (context) => DetailLaporanKemahasiswan("Detail", id,status),
                     ),
                   ).then((value) {
                     // Reload data after returning from the detail page
