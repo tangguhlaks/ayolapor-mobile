@@ -33,9 +33,7 @@ class _EditLaporanState extends State<EditLaporan> {
   }
 
   Future<void> fetchData() async {
-    var headers = {
-      'Cookie': 'XSRF-TOKEN=your_token_here; laravel_session=your_session_here'
-    };
+    var headers = {'Cookie': 'YOUR_COOKIE_HERE'};
     var request = http.MultipartRequest(
         'GET', Uri.parse(GlobalsConfig.url_api + 'report/' + widget.id));
 
@@ -60,19 +58,22 @@ class _EditLaporanState extends State<EditLaporan> {
     }
   }
 
-  void updateData() async {
+  void updateData(String status) async {
     var headers = {
       'Content-Type': 'application/json',
-      'Cookie': 'XSRF-TOKEN=your_token_here; laravel_session=your_session_here'
+      'Cookie': 'YOUR_COOKIE_HERE'
     };
     var request = http.MultipartRequest(
-        'PUT', Uri.parse(GlobalsConfig.url_api + 'report/' + widget.id));
+        'POST', Uri.parse(GlobalsConfig.url_api + 'report-update'));
 
     request.headers.addAll(headers);
-
+    request.fields['id'] = widget.id;
     request.fields['title'] = titleController.text;
     request.fields['type'] = _selectedType!;
+    request.fields['status'] = status;
     request.fields['description'] = descriptionController.text;
+    request.fields['mahasiswa'] = '1';
+    request.fields['dosen_wali'] = '3';
 
     if (_filePath != null) {
       try {
@@ -95,10 +96,28 @@ class _EditLaporanState extends State<EditLaporan> {
       print("Update successful");
       final responseBody = await response.stream.bytesToString();
       print("Response body: $responseBody");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Update successful'),
+          backgroundColor: Colors.green,
+          duration: Duration(seconds: 2),
+        ),
+      );
+      titleController.clear();
+      descriptionController.clear();
+      _selectedType = null; // Clear selected type
+      _filePath = null; // Clear file path
     } else {
       print("Update failed: ${response.reasonPhrase}");
       final responseBody = await response.stream.bytesToString();
       print("Response body: $responseBody");
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Update failed'),
+          backgroundColor: Colors.red,
+          duration: Duration(seconds: 2),
+        ),
+      );
     }
   }
 
@@ -132,6 +151,7 @@ class _EditLaporanState extends State<EditLaporan> {
                   if (result != null) {
                     setState(() {
                       _filePath = result.files.single.path;
+                      print("Selected file path: $_filePath");
                     });
                   }
                   Navigator.of(context).pop();
@@ -147,6 +167,7 @@ class _EditLaporanState extends State<EditLaporan> {
                   if (pickedFile != null) {
                     setState(() {
                       _filePath = pickedFile.path;
+                      print("Selected file path: $_filePath");
                     });
                   }
                   Navigator.of(context).pop();
@@ -250,7 +271,7 @@ class _EditLaporanState extends State<EditLaporan> {
               onTap: _selectImage,
               child: Container(
                 width: double.infinity, // Full width
-                height: 150,
+                height: 300,
                 decoration: BoxDecoration(
                   image: _filePath != null
                       ? DecorationImage(
@@ -296,13 +317,14 @@ class _EditLaporanState extends State<EditLaporan> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: updateData, // Update data input
+                onPressed: () => updateData('Save as Draft'),
+                // Update data input
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.blue),
                 ),
                 child: Text(
-                  'Update',
+                  'Save as Draft',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
@@ -312,12 +334,28 @@ class _EditLaporanState extends State<EditLaporan> {
               width: double.infinity,
               height: 50,
               child: ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context); // Hanya kembali ke halaman sebelumnya
-                },
+                onPressed: () => updateData('Submitted to Dosen Wali'),
                 style: ButtonStyle(
                   backgroundColor:
                       MaterialStateProperty.all<Color>(Colors.green),
+                ),
+                child: Text(
+                  'Submitted to Dosen Wali',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ),
+            SizedBox(height: 8,),
+            SizedBox(
+              width: double.infinity,
+              height: 50,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context); // Kembali ke halaman sebelumnya
+                },
+                style: ButtonStyle(
+                  backgroundColor:
+                      MaterialStateProperty.all<Color>(Colors.grey),
                 ),
                 child: Text(
                   'Kembali',

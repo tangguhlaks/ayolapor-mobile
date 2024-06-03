@@ -259,7 +259,7 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
           InkWell(
             onTap: _selectImage, // Call _selectImage when tapped
             child: Container(
-              height: 150,
+              height: 300,
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(color: Colors.grey),
@@ -273,7 +273,7 @@ class _BuatLaporanFormState extends State<BuatLaporanForm> {
                   : Icon(
                       Icons.add_a_photo,
                       size: 48,
-                      color: Colors.grey,
+                      color: Colors.red,
                     ),
             ),
           ),

@@ -37,8 +37,7 @@ class _ReportPageState extends State<ReportPage> {
     var request = http.MultipartRequest(
         'GET',
         Uri.parse(
-            'https://ayolapor-api.evolve-innovation.com/api/report-by-username/' +
-                username));
+            'https://ayolapor-api.evolve-innovation.com/api/report/'));
     request.fields.addAll({
       // 'status':  json.encode(['Need Approve By Kemahasiswaan', 'Report Process By Kemahasiswaan','Report Rejected By Kemahasiswaan']),
     });

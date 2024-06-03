@@ -82,7 +82,7 @@ class _MahasiswaHomePageState extends State<_MahasiswaHomePage> {
     try {
       int bullying = await fetchReportCount('bullying');
       int seksual = await fetchReportCount('seksual');
-      int kekerasan = await fetchReportCount('kekerasan');
+      int kekerasan = await fetchReportCount('kekerasan Fisik');
 
       setState(() {
         bullyingCount = bullying;
@@ -302,7 +302,7 @@ class _MahasiswaHomePageState extends State<_MahasiswaHomePage> {
                     ),
                     SizedBox(width: 5),
                     Text(
-                      'Kekerasan: ' + kekerasanCount.toString(),
+                      'Kekerasan Fisik: ' + kekerasanCount.toString(),
                       style: TextStyle(
                         color: Colors.red,
                         fontSize: 16,
