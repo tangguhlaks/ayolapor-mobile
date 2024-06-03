@@ -1,104 +1,58 @@
 import 'package:ayolapor/detaillaporandosenwali.dart';
 import 'package:flutter/material.dart';
-import 'package:ayolapor/home.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class ReportPageDosenWali extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => ReportPageDosenWaliState();
+  _ReportPageDosenWaliState createState() =>
+      _ReportPageDosenWaliState();
 }
 
-class Report {
-  String reporter;
-  String date;
-  String status;
-
-  Report({required this.reporter, required this.date, required this.status});
-
-  Map<String, String> toMap() {
-    return {
-      'reporter': reporter,
-      'date': date,
-      'status': status,
-    };
-  }
-
-  static Report fromMap(Map<String, String> map) {
-    return Report(
-      reporter: map['reporter']!,
-      date: map['date']!,
-      status: map['status']!,
-    );
-  }
-}
-
-class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
-  List<Report> listReport = [];
+class _ReportPageDosenWaliState extends State<ReportPageDosenWali> {
+  List<dynamic> reports = [];
 
   @override
   void initState() {
     super.initState();
-    _loadReports();
+    fetchReports();
   }
 
-  void _loadReports() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? savedReports = prefs.getStringList('reports');
-    if (savedReports != null) {
+
+  Future<void> fetchReports() async {
+    var headers = {
+      'Cookie':
+          'XSRF-TOKEN=eyJpdiI6ImhjekZVVFREM1k3QVkwUCtZUkVpc0E9PSIsInZhbHVlIjoibGJ6VjBDc3BIdVBLSHc4TXZabCtsaTFBOHp3RDYxSzdmZmpYdGtzY3NqVUFDeTdiZ05RbXF5UXI2TDhRdXNsT0dURGZFU3R5dnI0eVRsNTd0K0JIWmVsSTNmNHRNSmRjMUpjVDg3MnFScjFHNEw4T3ZYNzBadGdnZHk2RlUwdTIiLCJtYWMiOiI1ZTIxNGFkZDg0ZjBkYjg0NDI4NWJiZDYwMzhmZTQyYTQwMzZmNWI0MDllODVjOWZmZGViN2RmZTBhY2IzNTM1IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ik1vakRIS2Jxb2dwWmVrL2FYdUQ4c1E9PSIsInZhbHVlIjoiaW8wR2xlMTFaUk8rVnEvZ0tLalJCN2lSd1NVUXZtbFJFeFR3b3p5MjNyYmxmcEJKRy85SVR2Y1AxWUVqWUdoT2s4UE5rM3ZTQjVhTWQrRnlRRy9HWldFQUdvcllwZ1FnanJJdVUvcjljdWkvemdMNE5ieEczOEtXYUMrQ1oyczUiLCJtYWMiOiJmYTA4NzAxYmRiYTBkYmI2NzM4ZmI2MTQwMDBlZTc3MTZkMmUzMzAzNWIyOTM0NGMwY2YyNmVjYjIxYjg4NzEwIiwidGFnIjoiIn0%3D'
+    };
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://ayolapor-api.evolve-innovation.com/api/report-by-status'));
+    request.fields.addAll({
+      'status':  json.encode(['Submitted to Dosen Wali', 'Processed by Dosen Wali','Rejected by Dosen Wali','Finish']),
+    });
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> decodedBody = json.decode(responseBody);
+
       setState(() {
-        listReport = savedReports
-            .map((reportStr) => Report.fromMap(Map<String, String>.from(
-                json.decode(reportStr))))
-            .toList();
+        reports = decodedBody['data'];
       });
     } else {
-      setState(() {
-        listReport = [
-          Report(
-              reporter: 'Tangguh Laksana',
-              date: '17 Mei 2023',
-              status: 'Menunggu Tindak Lanjut Dosen Wali'),
-          Report(
-              reporter: 'Tangguh Laksana',
-              date: '12 Mei 2023',
-              status: 'Menunggu Tindak Lanjut Dosen Wali'),
-          Report(
-              reporter: 'Tangguh Laksana',
-              date: '20 Mei 2023',
-              status: 'Menunggu Tindak Lanjut Dosen Wali'),
-          Report(
-              reporter: 'Tangguh Laksana',
-              date: '15 Mei 2023',
-              status: 'Menunggu Tindak Lanjut Dosen Wali'),
-          Report(
-              reporter: 'Tangguh Laksana',
-              date: '21 Mei 2023',
-              status: 'Menunggu Tindak Lanjut Dosen Wali'),
-        ];
-      });
+      print(response.reasonPhrase);
     }
-  }
-
-  void _saveReports() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> reportsToSave =
-        listReport.map((report) => json.encode(report.toMap())).toList();
-    await prefs.setStringList('reports', reportsToSave);
-  }
-
-  void updateReportStatus(int index, String newStatus) {
-    setState(() {
-      listReport[index].status = newStatus;
-    });
-    _saveReports();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
+        title: Text(
           'Report',
           style: TextStyle(
             color: Colors.red,
@@ -107,33 +61,30 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
         ),
         centerTitle: true,
         leading: IconButton(
-          icon: const Icon(
+          icon: Icon(
             Icons.keyboard_arrow_left,
             color: Colors.red,
             size: 24,
           ),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => Home()),
-            );
+            Navigator.pop(context);
           },
         ),
         elevation: 4,
-        automaticallyImplyLeading: false,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: ListView.builder(
-          itemCount: listReport.length,
-          itemBuilder: (context, index) {
+          itemCount: reports.length,
+          itemBuilder: (BuildContext context, int index) {
+            var report = reports[index];
             return buildOption(
               context,
-              listReport[index].reporter,
+              report['title']+' - '+report['first_name']+' '+report['last_name'],
               Icons.more_vert,
-              listReport[index].date,
-              listReport[index].status,
-              index,
+              report['created_at'],
+              report['status'],
+              report['id'].toString()
             );
           },
         ),
@@ -142,14 +93,13 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
   }
 
   Widget buildOption(BuildContext context, String text, IconData icon,
-      String date, String status, int index) {
+      String date, String status,String id) {
     Color statusColor = Colors.red;
-    if (status == 'Selesai') {
+    if (status == 'Selesai' ||
+        status == 'Sudah Ditindak Lanjut Dosen Wali') {
       statusColor = Colors.green;
-    } else if (status == 'Tolak Laporan') {
-      statusColor = Colors.red;
-    } else if (status == 'Tindak Lanjuti') {
-      statusColor = Color.fromARGB(255, 151, 136, 3);
+    } else if (status == 'Save Draft') {
+      statusColor = Colors.yellow;
     }
 
     return Container(
@@ -179,7 +129,7 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
                     color: Colors.grey.withOpacity(0.5),
                     spreadRadius: 1,
                     blurRadius: 2,
-                    offset: Offset(0, 1),
+                    offset: Offset(0, 1), // changes position of shadow
                   ),
                 ],
               ),
@@ -196,15 +146,13 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
             color: Colors.red,
             size: 24,
           ),
-          onTap: () {
-            _showOptions(context, index);
-          },
+          onTap: () => {_showOptions(context,id)},
         ),
       ),
     );
   }
 
-  void _showOptions(BuildContext context, int index) {
+  void _showOptions(BuildContext context,String id) {
     showModalBottomSheet(
       context: context,
       builder: (BuildContext context) {
@@ -214,21 +162,18 @@ class ReportPageDosenWaliState extends State<ReportPageDosenWali> {
               ListTile(
                 leading: Icon(Icons.search),
                 title: Text('Detail'),
-                onTap: () {
-                  Navigator.pop(context);
+               onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DetailLaporanDosenWali(
-                        type: "Tinjauan Laporan MHS",
-                        reportIndex: index,
-                        onStatusChanged: (newStatus) {
-                          updateReportStatus(index, newStatus);
-                        },
-                      ),
+                      builder: (context) => DetailLaporanDosenWali("Detail", id),
                     ),
-                  );
-                },
+                  ).then((value) {
+                    // Reload data after returning from the detail page
+                    fetchReports();
+                    Navigator.pop(context);
+                  });
+                }
               ),
             ],
           ),

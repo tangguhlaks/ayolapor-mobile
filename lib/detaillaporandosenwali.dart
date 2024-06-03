@@ -1,24 +1,97 @@
+import 'dart:convert';
+import 'package:ayolapor/GlobalConfig.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-class DetailLaporanDosenWali extends StatelessWidget {
+class DetailLaporanDosenWali extends StatefulWidget {
   final String type;
-  final int reportIndex;
-  final Function(String) onStatusChanged;
+  final String id;
 
-  DetailLaporanDosenWali({
-    required this.type,
-    required this.reportIndex,
-    required this.onStatusChanged,
-    Key? key,
-  }) : super(key: key);
+  DetailLaporanDosenWali(this.type, this.id);
+
+  @override
+  _DetailLaporanDosenWaliState createState() => _DetailLaporanDosenWaliState();
+}
+
+class _DetailLaporanDosenWaliState extends State<DetailLaporanDosenWali> {
+  Map<String, dynamic> detailData = {};
+  String currentStatus = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    var headers = {
+      'Cookie': 'XSRF-TOKEN=eyJpdiI6ImhjekZVVFREM1k3QVkwUCtZUkVpc0E9PSIsInZhbHVlIjoibGJ6VjBDc3BIdVBLSHc4TXZabCtsaTFBOHp3RDYxSzdmZmpYdGtzY3NqVUFDeTdiZ05RbXF5UXI2TDhRdXNsT0dURGZFU3R5dnI0eVRsNTd0K0JIWmVsSTNmNHRNSmRjMUpjVDg3MnFScjFHNEw4T3ZYNzBadGdnZHk2RlUwdTIiLCJtYWMiOiI1ZTIxNGFkZDg0ZjBkYjg0NDI4NWJiZDYwMzhmZTQyYTQwMzZmNWI0MDllODVjOWZmZGViN2RmZTBhY2IzNTM1IiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ik1vakRIS2Jxb2dwWmVrL2FYdUQ4c1E9PSIsInZhbHVlIjoiaW8wR2xlMTFaUk8rVnEvZ0tLalJCN2lSd1NVUXZtbFJFeFR3b3p5MjNyYmxmcEJKRy85SVR2Y1AxWUVqWUdoT2s4UE5rM3ZTQjVhTWQrRnlRRy9HWldFQUdvcllwZ1FnanJJdVUvcjljdWkvemdMNE5ieEczOEtXYUMrQ1oyczUiLCJtYWMiOiJmYTA4NzAxYmRiYTBkYmI2NzM4ZmI2MTQwMDBlZTc3MTZkMmUzMzAzNWIyOTM0NGMwY2YyNmVjYjIxYjg4NzEwIiwidGFnIjoiIn0%3D'
+    };
+    var request = http.MultipartRequest('GET', Uri.parse(GlobalsConfig.url_api+'report/'+widget.id));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var responseBody = await response.stream.bytesToString();
+      Map<String, dynamic> decodedBody = json.decode(responseBody);
+
+      setState(() {
+        detailData = decodedBody['data'];
+        currentStatus = decodedBody['data']['status'];
+      });
+    } else {
+      print(response.reasonPhrase);
+    }
+  }
+
+  void updateStatus(String status) async {
+    var headers = {
+      'Cookie': 'XSRF-TOKEN=eyJpdiI6Ind1dHpicmgxZ2lSaGp0MjZTZ0hUWEE9PSIsInZhbHVlIjoiKzNoTE95WVFtaUhSVVRQakMwUDdUVmpUaHYrOTJsVEhGaTlmYVY5bmlncWVJZjJRYUNGN2szWlF1MFBaa080S3NFUytVZlduSzZPeXprRjU2U0VZVDJTTHBKcW4wMHArdHE5MlJWRWYrUkN6NlF4Uzl0UDBIRW5PaWFOQkFzWUwiLCJtYWMiOiJhN2JmZjYzZjc5OTRiNGU5ZGQ1NzdjM2QyNTM1ZjBkMTE1MjNjN2UyMTU0NmE5NjdkYTZlNDA3ZTM2MjNiZjRhIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImdkM0k4MWJPbEYvYzJLNUt2dWN4Ync9PSIsInZhbHVlIjoiOThGU21wZld6THdLMTZQVnNyVURVOTZzUjV0U29OelJudmxHWVJyUHM1OUR0WUhOZURRQ2Z3YS9CNDNhS1NybUZiS2l2QTF3eFM1bjlkWnBCQ2V0Vkg2VlE5a21mcTVEdFhJSHo0WjgwUEVmSnU2ekdZQmRBaE9TVWVpYmd1QjMiLCJtYWMiOiJmZTI4MTlhYzBiZDJjZTc1YzgzNmRiZWVjOGMwOGU4MjEwMTY3NGY0ZTAzNmQzOGU4NWZhOGEwODNhNmU3MDgxIiwidGFnIjoiIn0%3D'
+    };
+    var request = http.MultipartRequest('PUT', Uri.parse(GlobalsConfig.url_api+'report-update-status/'+widget.id+'?status='+status));
+
+    request.headers.addAll(headers);
+
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      print(await response.stream.bytesToString());
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Status Report Berhasil Diperbaharui',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.green,
+        ),
+      );
+      setState(() {
+        currentStatus = status;
+      });
+    } else {
+      print(response.reasonPhrase);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Status Report Gagal Diperbaharui',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+
+    Navigator.pop(context); // Kembali ke halaman sebelumnya setelah pembaruan
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          type,
+          widget.type,
           style: TextStyle(
             color: Colors.red,
             fontWeight: FontWeight.bold,
@@ -32,22 +105,41 @@ class DetailLaporanDosenWali extends StatelessWidget {
             size: 24,
           ),
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.pop(context); // Kembali ke halaman sebelumnya
           },
         ),
         elevation: 4,
       ),
-      body: DetailLaporanBody(context),
+      body: DetailLaporanBody(),
     );
   }
 
-  Widget DetailLaporanBody(BuildContext context) {
+  Widget DetailLaporanBody() {
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            SizedBox(height: 10),
+            Text("Title", style: TextStyle(fontWeight: FontWeight.bold)),
+            SizedBox(height: 5),
+            Container(
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 15.0),
+                child: TextField(
+                  decoration: InputDecoration(
+                    labelText: detailData["title"],
+                    border: InputBorder.none,
+                  ),
+                  readOnly: true,
+                ),
+              ),
+            ),
             SizedBox(height: 10),
             Text("Jenis Laporan", style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
@@ -60,16 +152,31 @@ class DetailLaporanDosenWali extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 15.0),
                 child: TextField(
                   decoration: InputDecoration(
-                    labelText: 'Pelecehan',
+                    labelText: detailData["type"],
                     border: InputBorder.none,
                   ),
+                  readOnly: true,
                 ),
               ),
             ),
             SizedBox(height: 10),
             Text("Bukti", style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
-            Image(image: AssetImage("assets/berita.jpg")),
+            Container(
+              height: 150,
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(10.0),
+                image: DecorationImage(
+                  image: NetworkImage(
+                      'https://ayolapor-api.evolve-innovation.com/assets/prove/${detailData['prove']}'),
+                  fit: BoxFit.cover,
+                  onError: (error, stackTrace) {
+                    //return AssetImage('assets/placeholder_image.png');
+                  },
+                ),
+              ),
+            ),
             SizedBox(height: 10),
             Text("Keterangan", style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 5),
@@ -84,135 +191,124 @@ class DetailLaporanDosenWali extends StatelessWidget {
                   minLines: 5,
                   maxLines: null,
                   decoration: InputDecoration(
-                    labelText: 'Saya dilecehkan di toilet TULT',
+                    labelText: detailData['description'],
                     border: InputBorder.none,
                   ),
+                  readOnly: true,
                 ),
               ),
             ),
             SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => _updateStatus('Tolak Laporan', context),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.grey),
-                ),
-                child: Text(
-                  'Tolak Laporan',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-            ),
-            SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => _updateStatus('Tindak Lanjuti', context),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                ),
-                child: Text(
-                  'Tindak Lanjuti',
-                  style: TextStyle(color: Colors.white),
+            if (currentStatus == '' || currentStatus == 'Processed By Dosen Wali') ...[
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    updateStatus("Finish");
+                  },
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.green)),
+                  child: Text(
+                    'Selesai',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(height: 8),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                onPressed: () => _updateStatus('Selesai', context),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all<Color>(Colors.green),
-                ),
-                child: Text(
-                  'Selesai',
-                  style: TextStyle(color: Colors.white),
+              SizedBox(height: 8),
+               SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    updateStatus("Submitted to Kemahasiswaan");
+                  },
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.orange)),
+                  child: Text(
+                    'Submit Ke Kemahasiswaan',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
-            ),
+              SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    updateStatus("Rejected By Dosen Wali");
+                  },
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red)),
+                  child: Text(
+                    'Tolak Laporan',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+              if (currentStatus == '') ...[
+                SizedBox(height: 8),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      updateStatus("Processed By Dosen Wali");
+                    },
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.grey)),
+                    child: Text(
+                      'Tindak Lanjuti',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              ],
+            ] else if (currentStatus == 'Finish' || currentStatus == 'Rejected By Dosen Wali') ...[
+              Container(), // Tidak tampilkan tombol apapun
+            ] else if (currentStatus == 'Submitted to Dosen Wali') ...[
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      updateStatus("Processed By Dosen Wali");
+                    },
+                    style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.grey)),
+                    child: Text(
+                      'Tindak Lanjuti',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ),
+              SizedBox(height: 8),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  onPressed: () {
+                    updateStatus("Rejected By Dosen Wali");
+                  },
+                  style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.red)),
+                  child: Text(
+                    'Tolak Laporan',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ]
           ],
         ),
       ),
     );
-  }
-
-  Future<void> _updateStatus(String newStatus, BuildContext context) async {
-    try {
-      var url = Uri.parse('https://ayolapor-api.evolve-innovation.com/api/report/4');
-      var response = await http.put(
-        url,
-        body: {
-          "title": "asdf",
-          "type": "Bullying",
-          "prove": "1715237496_p-removebg.png",
-          "description": "Tes dari aplikasi",
-          "status": newStatus,
-          "mahasiswa": "1",
-          "dosen_wali": "3",
-        },
-      );
-
-      if (response.statusCode == 200) {
-        onStatusChanged(newStatus);
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Berhasil'),
-              content: Text('Berhasil mengirim permintaan ke server.'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      } else {
-        showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text('Error'),
-              content: Text('Gagal mengirim permintaan ke server.'),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    } catch (e) {
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Error'),
-            content: Text('Terjadi kesalahan: $e'),
-            actions: <Widget>[
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text('OK'),
-              ),
-            ],
-          );
-        },
-      );
-    }
   }
 }
