@@ -7,8 +7,9 @@ import 'package:http/http.dart' as http;
 class DetailLaporanKemahasiswan extends StatefulWidget {
   final String type;
   final String id;
+  final String status;
 
-  DetailLaporanKemahasiswan(this.type,this.id);
+  DetailLaporanKemahasiswan(this.type,this.id,this.status);
 
   @override
   _DetailLaporanKemahasiswanState createState() =>
@@ -20,6 +21,7 @@ class _DetailLaporanKemahasiswanState extends State<DetailLaporanKemahasiswan> {
 
   @override
   void initState() {
+    super.initState();
     fetchData();
   }
   Future<void> fetchData() async {
@@ -187,12 +189,13 @@ class _DetailLaporanKemahasiswanState extends State<DetailLaporanKemahasiswan> {
               ),
             ),
             SizedBox(height: 20),
+            if (widget.status == "Submitted to Kemahasiswaan") ...[
             SizedBox(
               width: double.infinity,
               height: 50, // Mengatur tinggi tombol
               child: ElevatedButton(
                 onPressed: () {
-                  updateStatus("Report Rejected By Kemahasiswaan");
+                  updateStatus("Rejected by Kemahasiswaan");
                 },
                 style: ButtonStyle(
                     backgroundColor:
@@ -209,18 +212,20 @@ class _DetailLaporanKemahasiswanState extends State<DetailLaporanKemahasiswan> {
               height: 50, // Mengatur tinggi tombol
               child: ElevatedButton(
                 onPressed: () {
-                  updateStatus("Report Process By Kemahasiswaan");
+                  updateStatus("Processed by Kemahasiswaan");
                 },
                 style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.grey)),
+                        MaterialStateProperty.all<Color>(Colors.green)),
                 child: Text(
                   'Tindak Lanjuti',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
             ),
+            ],
             SizedBox(height: 8),
+            if (widget.status == "Processed by Kemahasiswaan") ...[
             SizedBox(
               width: double.infinity,
               height: 50, // Mengatur tinggi tombol
@@ -237,6 +242,7 @@ class _DetailLaporanKemahasiswanState extends State<DetailLaporanKemahasiswan> {
                 ),
               ),
             ),
+            ]
           ],
         ),
       ),
