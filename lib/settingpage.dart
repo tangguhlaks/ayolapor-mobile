@@ -1,6 +1,7 @@
 import 'package:ayolapor/bugreportpage.dart';
 import 'package:ayolapor/home.dart';
 import 'package:ayolapor/faqpage.dart';
+import 'package:ayolapor/main.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'profile.dart';
@@ -22,7 +23,10 @@ class SettingPage extends StatelessWidget {
   void _logout(BuildContext context) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    Navigator.pop(context);
+   Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => LoginScreen()),
+            );
   }
 
   @override

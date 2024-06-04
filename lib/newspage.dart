@@ -73,6 +73,7 @@ class _NewsFormState extends State<NewsForm> {
               ),
               child: widget.gambar != null
                   ? Image.network(
+                    'https://ayolapor-api.evolve-innovation.com/assets/news/'+
                       widget.gambar,
                       fit: BoxFit.cover,
                     )
