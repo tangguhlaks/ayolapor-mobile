@@ -141,7 +141,9 @@ class _TambahBeritaFormState extends State<TambahBeritaForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return 
+    SingleChildScrollView(child:   
+     Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: <Widget>[
         // Upload Image
@@ -209,6 +211,7 @@ class _TambahBeritaFormState extends State<TambahBeritaForm> {
           ),
         ),
       ],
+    )
     );
   }
 
